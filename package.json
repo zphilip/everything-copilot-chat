@@ -39,12 +39,12 @@
   ],
   "repository": {
     "type": "git",
-    "url": "https://github.com/ltmoerdani/everything-copilot-chat.git"
+    "url": "https://github.com/zphilip/everything-copilot-chat.git"
   },
   "bugs": {
-    "url": "https://github.com/ltmoerdani/everything-copilot-chat/issues"
+    "url": "https://github.com/zphilip/everything-copilot-chat/issues"
   },
-  "homepage": "https://github.com/ltmoerdani/everything-copilot-chat#readme",
+  "homepage": "https://github.com/zphilip/everything-copilot-chat#readme",
   "engines": {
     "vscode": "^1.125.0"
   },
