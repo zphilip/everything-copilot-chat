@@ -1,0 +1,23 @@
+#!/usr/bin/env sh
+# Fail fast: a failing step aborts the commit so the formatter can't mask a lint error.
+set -e
+
+# Some commit UIs run hooks with a stripped PATH that omits nvm's bin dir, so
+# npx/npm can be missing here. Resolve them so the gate never silently skips.
+if ! command -v npx >/dev/null 2>&1; then
+  node_bin="${NVM_BIN:-}"
+  if [ -z "$node_bin" ] || [ ! -x "$node_bin/npx" ]; then
+    node_bin="$(find "$HOME/.nvm/versions/node" -maxdepth 3 -type d -name bin 2>/dev/null | sort -V | tail -n 1)"
+  fi
+  if [ -n "$node_bin" ] && [ -x "$node_bin/npx" ]; then
+    export PATH="$node_bin:$PATH"
+  fi
+fi
+
+# Zero-tolerance gate on exactly what this change can affect: the staged
+# files plus the files that import them (see scripts/staged-lint.ts). All
+# linters run in CHECK mode only — nothing is ever rewritten or renamed at
+# commit time; a violation blocks the commit with an error and the user
+# fixes it (or runs `npm run format` / `npm run lint:fix`) themselves.
+npx tsx scripts/staged-lint.ts
+npx lint-staged

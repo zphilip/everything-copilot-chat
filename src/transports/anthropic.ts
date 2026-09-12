@@ -1,0 +1,38 @@
+import type { StreamRequestOptions } from "../core/transport";
+import { createThinkTagFilter } from "./thinkTags";
+import { createReasoningDebugger, streamOpenCodeResponse } from "./engine";
+import { AnthropicResponseExtractor } from "./extractors";
+import { extractAnthropicParts } from "./extract";
+
+/** Anthropic Messages API transport (Claude-family / MiniMax m2.x / Qwen 3.x-plus). */
+export async function streamAnthropicMessages(options: StreamRequestOptions): Promise<void> {
+  const thinkFilter = createThinkTagFilter(options.stripThinkTags, options.modelId, options.forceStripThinkTags);
+  const extractor = new AnthropicResponseExtractor(
+    options.onReasoningContent,
+    createReasoningDebugger(options.output, options.debugReasoning),
+    thinkFilter,
+    options.progress,
+    options.requestHeaders["x-opencode-request"],
+  );
+
+  try {
+    await streamOpenCodeResponse({
+      ...options,
+      usesDoneSentinel: false,
+      extractStreamParts: (data) => extractor.extractStreamParts(data),
+      extractFullParts: extractAnthropicParts,
+    });
+  } finally {
+    // Flush accumulated reasoning even when the engine throws (e.g.
+    // truncation detection) so nothing already received is dropped.
+    extractor.flushReasoningFallback(options.progress, options.requestHeaders["x-opencode-request"]);
+  }
+  options.output?.appendLine(
+    `[stream-summary model=${options.modelId}] textChars=${String(extractor.emittedText)} toolCalls=${String(extractor.emittedTools)} reasoningChars=${String(extractor.reasoningChars)}`,
+  );
+  if (extractor.emittedText === 0 && extractor.emittedTools === 0) {
+    options.output?.appendLine(
+      `[warn] empty response from model=${options.modelId} (no text, no tool calls, no reasoning). Try a different free model or enable opencodego.debugReasoning to inspect raw SSE.`,
+    );
+  }
+}
