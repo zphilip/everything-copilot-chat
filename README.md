@@ -150,16 +150,13 @@ Run **Preferences: Open Settings (UI)** and search `opencode` / `volcengine` / `
 
 ## 🎛️ Commands
 
-| Command | Description |
-| ------- | ----------- |
-| `OpenCode Go: Manage Provider` / `Refresh Models` / `Diagnostics` | Test connection, refresh models, report |
-| `OpenCode Zen: Manage Provider` / `Refresh Models` / `Diagnostics` | Same for Zen |
-| `OpenCode: Model Picker Diagnostics` | All registered models (Go + Zen + Ark + Qianwen + Copilot) side-by-side |
-| `OpenCode: Set Thinking Effort…` | Per-family thinking mode picker |
-| `OpenCode Go: Show Usage Details` | Detailed Go subscription usage breakdown |
-| `OpenCode Go: Set Usage Targets…` | Edit 5h / weekly / monthly spend targets |
-| `OpenCode Go: Configure Vision Proxy` | Pick a vision model so text-only models can "see" images |
-| `OpenCode Go: Remove/Re-add Provider in Language Models` | Remove or restore OpenCode Go in all pickers |
+Run these from the **Command Palette** (`Cmd/Ctrl+Shift+P`). Most are registered **per provider** — `OpenCode Go`, `OpenCode Zen`, `Volcengine Ark`, and `Qianwen AI` each expose the same set:
+
+| Group | Commands |
+| ----- | -------- |
+| **Per provider** (×4) | `…: Manage Provider` — test connection, refresh models, configure utility models<br>`…: Refresh Models` — force a fresh model-list fetch<br>`…: Diagnostics` — markdown report of models + recent request summaries<br>`…: Remove/Re-add Provider in Language Models` — toggle the provider off/on in every picker |
+| **Cross-provider** | `OpenCode: Model Picker Diagnostics` — all registered models side-by-side<br>`OpenCode: Configure Utility Models` — utility-task model settings<br>`OpenCode: Set Thinking Effort…` — per-family reasoning picker |
+| **OpenCode Go** | `OpenCode Go: Show Usage Details` · `…: Show Usage Quick Pick` · `…: Set Usage Targets…` · `…: Rename Active Profile` · `…: Delete Profile` — subscription metering & profiles<br>`OpenCode Go: Configure Vision Proxy` — pick a vision model so text-only models can "see" images |
 
 ---
 
