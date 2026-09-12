@@ -6,13 +6,13 @@
 
 **Bring Your Own Key (BYOK)** · OpenCode Zen (free + paid models) or Go ($10/mo subscription) · Works with native Copilot Agent Mode
 
-[![CI](https://github.com/ltmoerdani/everything-copilot-chat/actions/workflows/ci.yml/badge.svg)](https://github.com/ltmoerdani/everything-copilot-chat/actions/workflows/ci.yml)
+[![CI](https://github.com/zphilip/everything-copilot-chat/actions/workflows/ci.yml/badge.svg)](https://github.com/zphilip/everything-copilot-chat/actions/workflows/ci.yml)
 [![VS Code Marketplace](https://img.shields.io/badge/Install-VS%20Code%20Marketplace-007ACC?logo=visualstudiocode&logoColor=white)](https://marketplace.visualstudio.com/items?itemName=ltmoerdani.everything-copilot-chat)
-[![Version](https://img.shields.io/github/v/release/ltmoerdani/everything-copilot-chat?label=Version&color=6c47ff)](https://github.com/ltmoerdani/everything-copilot-chat/releases)
+[![Version](https://img.shields.io/github/v/release/zphilip/everything-copilot-chat?label=Version&color=6c47ff)](https://github.com/zphilip/everything-copilot-chat/releases)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](./LICENSE)
 [![VS Code](https://img.shields.io/badge/VS%20Code-1.125%2B-007ACC?logo=visualstudiocode&logoColor=white)](https://code.visualstudio.com/)
 [![PRs Welcome](https://img.shields.io/badge/PRs-Welcome-brightgreen)](./CONTRIBUTING.md)
-[![Stars](https://img.shields.io/github/stars/ltmoerdani/everything-copilot-chat?style=social)](https://github.com/ltmoerdani/everything-copilot-chat)
+[![Stars](https://img.shields.io/github/stars/zphilip/everything-copilot-chat?style=social)](https://github.com/zphilip/everything-copilot-chat)
 
 [**✨ Why you'll love it**](#-why-youll-love-it) · [**⚡ Quick Start (60 sec)**](#-quick-start-60-sec) · [**🧠 Models**](#-models) · [**📊 Compare**](#-github-copilot-vs-this-extension) · [**🔧 Settings**](#-settings) · [**❓ FAQ**](#-faq) · [**💬 Community**](#-community)
 
@@ -493,7 +493,7 @@ In your VS Code **language-models configuration** — add it via **Chat: Manage 
 
 Not safely through the VS Code language-model provider contract yet. `opencode serve` exposes OpenCode sessions and agents, whose tools execute inside OpenCode, rather than a Chat Completions, Responses, or Messages inference endpoint that can return VS Code tool calls. Registering only its model list would produce entries that lose Copilot's tool loop and permission UI.
 
-For a local OpenAI/Anthropic-compatible inference server, use VS Code's **Custom Endpoint** provider directly. Native OpenCode-server support is tracked in [#88](https://github.com/ltmoerdani/everything-copilot-chat/issues/88).
+For a local OpenAI/Anthropic-compatible inference server, use VS Code's **Custom Endpoint** provider directly. Native OpenCode-server support is tracked in [#88](https://github.com/zphilip/everything-copilot-chat/issues/88).
 
 </details>
 
@@ -530,7 +530,7 @@ After reloading, open the **Agents window**, start a Copilot CLI session, and pi
 <details>
 <summary><b>How do I report a bug or request a model?</b></summary>
 
-[Open an issue](https://github.com/ltmoerdani/everything-copilot-chat/issues/new/choose) — pick the Bug Report or Feature Request template. Include the diagnostics report (`OpenCode Go: Diagnostics` or `OpenCode Zen: Diagnostics`).
+[Open an issue](https://github.com/zphilip/everything-copilot-chat/issues/new/choose) — pick the Bug Report or Feature Request template. Include the diagnostics report (`OpenCode Go: Diagnostics` or `OpenCode Zen: Diagnostics`).
 
 </details>
 
@@ -569,8 +569,8 @@ See [`docs/architecture/`](./docs/architecture/) for the full provider architect
 Contributions welcome! Whether it's a typo fix, new model support, or a screenshot — every PR counts.
 
 📋 See **[CONTRIBUTING.md](./CONTRIBUTING.md)** for guidelines.
-💬 Discussions: [GitHub Discussions](https://github.com/ltmoerdani/everything-copilot-chat/discussions)
-🐞 Bugs: [Issue Tracker](https://github.com/ltmoerdani/everything-copilot-chat/issues)
+💬 Discussions: [GitHub Discussions](https://github.com/zphilip/everything-copilot-chat/discussions)
+🐞 Bugs: [Issue Tracker](https://github.com/zphilip/everything-copilot-chat/issues)
 
 ### Development
 
@@ -596,24 +596,24 @@ Press `F5` in VS Code to launch an **Extension Development Host**.
 - [ ] 🎨 Custom model aliases / favorites
 - [ ] 🌍 i18n (id, zh, ja)
 
-> Have an idea? [Start a discussion](https://github.com/ltmoerdani/everything-copilot-chat/discussions/new) or [open a feature request](https://github.com/ltmoerdani/everything-copilot-chat/issues/new?labels=enhancement&template=feature_request.md).
+> Have an idea? [Start a discussion](https://github.com/zphilip/everything-copilot-chat/discussions/new) or [open a feature request](https://github.com/zphilip/everything-copilot-chat/issues/new?labels=enhancement&template=feature_request.md).
 
 ---
 
 ## ⭐ Star History
 
 <p align="center">
-  <a href="https://github.com/ltmoerdani/everything-copilot-chat">
-    <img src="https://img.shields.io/github/stars/ltmoerdani/everything-copilot-chat?style=social" alt="GitHub stars" />
+  <a href="https://github.com/zphilip/everything-copilot-chat">
+    <img src="https://img.shields.io/github/stars/zphilip/everything-copilot-chat?style=social" alt="GitHub stars" />
   </a>
   &nbsp;👆 <b>Star this repo if it saved you money or unlocked a model you needed!</b>
 </p>
 
-<a href="https://star-history.com/#ltmoerdani/everything-copilot-chat&Date">
+<a href="https://star-history.com/#zphilip/everything-copilot-chat&Date">
  <picture>
-   <source media="(prefers-color-scheme: dark)" srcset="https://api.star-history.com/svg?repos=ltmoerdani/everything-copilot-chat&type=Date&theme=dark" />
-   <source media="(prefers-color-scheme: light)" srcset="https://api.star-history.com/svg?repos=ltmoerdani/everything-copilot-chat&type=Date" />
-   <img alt="Star History Chart" src="https://api.star-history.com/svg?repos=ltmoerdani/everything-copilot-chat&type=Date" />
+   <source media="(prefers-color-scheme: dark)" srcset="https://api.star-history.com/svg?repos=zphilip/everything-copilot-chat&type=Date&theme=dark" />
+   <source media="(prefers-color-scheme: light)" srcset="https://api.star-history.com/svg?repos=zphilip/everything-copilot-chat&type=Date" />
+   <img alt="Star History Chart" src="https://api.star-history.com/svg?repos=zphilip/everything-copilot-chat&type=Date" />
  </picture>
 </a>
 
@@ -623,10 +623,10 @@ Press `F5` in VS Code to launch an **Extension Development Host**.
 
 ## 💬 Community
 
-[![GitHub Discussions](https://img.shields.io/badge/Discussions-Ask%20questions-blue?logo=github)](https://github.com/ltmoerdani/everything-copilot-chat/discussions)
-[![Issues](https://img.shields.io/badge/Issues-Report%20bugs-red?logo=github)](https://github.com/ltmoerdani/everything-copilot-chat/issues)
-[![X / Twitter](https://img.shields.io/badge/X-Share-orange?logo=x)](https://twitter.com/intent/tweet?text=Using%2030%2B%20AI%20models%20in%20GitHub%20Copilot%20Chat%20for%20free%20with%20BYOK!&url=https://github.com/ltmoerdani/everything-copilot-chat&hashtags=vscode,copilot,ai,byok,opencode)
-[![Reddit](https://img.shields.io/badge/Reddit-Share-orange?logo=reddit)](https://www.reddit.com/submit?url=https://github.com/ltmoerdani/everything-copilot-chat&title=OpenCode%20for%20Copilot%20Chat)
+[![GitHub Discussions](https://img.shields.io/badge/Discussions-Ask%20questions-blue?logo=github)](https://github.com/zphilip/everything-copilot-chat/discussions)
+[![Issues](https://img.shields.io/badge/Issues-Report%20bugs-red?logo=github)](https://github.com/zphilip/everything-copilot-chat/issues)
+[![X / Twitter](https://img.shields.io/badge/X-Share-orange?logo=x)](https://twitter.com/intent/tweet?text=Using%2030%2B%20AI%20models%20in%20GitHub%20Copilot%20Chat%20for%20free%20with%20BYOK!&url=https://github.com/zphilip/everything-copilot-chat&hashtags=vscode,copilot,ai,byok,opencode)
+[![Reddit](https://img.shields.io/badge/Reddit-Share-orange?logo=reddit)](https://www.reddit.com/submit?url=https://github.com/zphilip/everything-copilot-chat&title=OpenCode%20for%20Copilot%20Chat)
 
 **If this saves you money or unlocks a model you needed — ⭐ star the repo and share it!**
 
