@@ -1,0 +1,10 @@
+{
+  "extends": "./tsconfig.json",
+  "compilerOptions": {
+    "noEmit": true,
+    "rootDir": "."
+  },
+  "include": ["src", "scripts"],
+  // Mirrors .gitignore: nothing gitignored may enter the TS projects.
+  "exclude": ["node_modules", ".vscode-test", "out", "tmp"]
+}

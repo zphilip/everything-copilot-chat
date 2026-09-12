@@ -1,0 +1,691 @@
+{
+  "name": "everything-copilot-chat",
+  "displayName": "Everything Copilot Chat — BYOK 30+ AI Models",
+  "description": "Use 30+ frontier AI models (DeepSeek V4, Kimi K2.6, GLM-5.1, Qwen3.7, MiMo V2.5, MiniMax M2.7, free Claude Opus, GPT-5.5, Gemini 3.5, Grok) in GitHub Copilot Chat. Bring Your Own Key — no Copilot Pro needed.",
+  "version": "0.7.3",
+  "publisher": "ltmoerdani",
+  "license": "MIT",
+  "icon": "media/opencodego.png",
+  "galleryBanner": {
+    "color": "#0d1117",
+    "theme": "dark"
+  },
+  "keywords": [
+    "opencode",
+    "copilot",
+    "copilot-chat",
+    "byok",
+    "bring-your-own-key",
+    "ai",
+    "language-model",
+    "openai",
+    "anthropic",
+    "claude",
+    "gpt",
+    "gemini",
+    "grok",
+    "deepseek",
+    "qwen",
+    "kimi",
+    "glm",
+    "minimax",
+    "mimo",
+    "llm",
+    "chat",
+    "agent",
+    "reasoning",
+    "thinking",
+    "free-models"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/ltmoerdani/everything-copilot-chat.git"
+  },
+  "bugs": {
+    "url": "https://github.com/ltmoerdani/everything-copilot-chat/issues"
+  },
+  "homepage": "https://github.com/ltmoerdani/everything-copilot-chat#readme",
+  "engines": {
+    "vscode": "^1.125.0"
+  },
+  "categories": [
+    "AI",
+    "Machine Learning",
+    "Education",
+    "Other"
+  ],
+  "activationEvents": [
+    "onStartupFinished",
+    "onLanguageModelChatProvider:opencodego",
+    "onLanguageModelChatProvider:opencodezen",
+    "onLanguageModelChatProvider:volcengineArk",
+    "onLanguageModelChatProvider:qianwenai"
+  ],
+  "main": "./out/extension.js",
+  "contributes": {
+    "commands": [
+      {
+        "command": "opencodego.manage",
+        "title": "OpenCode Go: Manage Provider"
+      },
+      {
+        "command": "opencodego.toggleProvider",
+        "title": "OpenCode Go: Remove/Re-add Provider in Language Models"
+      },
+      {
+        "command": "opencodego.refreshModels",
+        "title": "OpenCode Go: Refresh Models"
+      },
+      {
+        "command": "opencodego.configureUtilityModels",
+        "title": "OpenCode: Configure Utility Models"
+      },
+      {
+        "command": "opencodego.diagnostics",
+        "title": "OpenCode Go: Diagnostics"
+      },
+      {
+        "command": "opencodezen.diagnostics",
+        "title": "OpenCode Zen: Diagnostics"
+      },
+      {
+        "command": "opencodezen.manage",
+        "title": "OpenCode Zen: Manage Provider"
+      },
+      {
+        "command": "opencodezen.toggleProvider",
+        "title": "OpenCode Zen: Remove/Re-add Provider in Language Models"
+      },
+      {
+        "command": "opencodezen.refreshModels",
+        "title": "OpenCode Zen: Refresh Models"
+      },
+      {
+        "command": "volcengineArk.manage",
+        "title": "Volcengine Ark: Manage Provider"
+      },
+      {
+        "command": "volcengineArk.toggleProvider",
+        "title": "Volcengine Ark: Remove/Re-add Provider in Language Models"
+      },
+      {
+        "command": "volcengineArk.diagnostics",
+        "title": "Volcengine Ark: Diagnostics"
+      },
+      {
+        "command": "volcengineArk.refreshModels",
+        "title": "Volcengine Ark: Refresh Models"
+      },
+      {
+        "command": "qianwenai.manage",
+        "title": "Qianwen AI: Manage Provider"
+      },
+      {
+        "command": "qianwenai.toggleProvider",
+        "title": "Qianwen AI: Remove/Re-add Provider in Language Models"
+      },
+      {
+        "command": "qianwenai.diagnostics",
+        "title": "Qianwen AI: Diagnostics"
+      },
+      {
+        "command": "qianwenai.refreshModels",
+        "title": "Qianwen AI: Refresh Models"
+      },
+      {
+        "command": "opencodego.modelPickerDiagnostics",
+        "title": "OpenCode: Model Picker Diagnostics"
+      },
+      {
+        "command": "opencodego.setThinkingEffort",
+        "title": "OpenCode: Set Thinking Effort..."
+      },
+      {
+        "command": "opencodego.showUsageDetails",
+        "title": "OpenCode Go: Show Usage Details"
+      },
+      {
+        "command": "opencodego.setUsageTargets",
+        "title": "OpenCode Go: Set Usage Targets…"
+      },
+      {
+        "command": "opencodego.showUsageQuickPick",
+        "title": "OpenCode Go: Show Usage Quick Pick"
+      },
+      {
+        "command": "opencodego.renameActiveProfile",
+        "title": "OpenCode Go: Rename Active Profile"
+      },
+      {
+        "command": "opencodego.deleteProfile",
+        "title": "OpenCode Go: Delete Profile"
+      },
+      {
+        "command": "opencodego.configureVisionProxy",
+        "title": "OpenCode Go: Configure Vision Proxy"
+      }
+    ],
+    "configuration": [
+      {
+        "title": "OpenCode",
+        "properties": {
+          "opencodego.usageTodayYesterdaySource": {
+            "type": "string",
+            "enum": [
+              "auto",
+              "cli",
+              "extension"
+            ],
+            "enumDescriptions": [
+              "Merge the OpenCode CLI history (cost + tokens + requests) with the extension's own tracked requests — the most accurate view when you also use OpenCode in the terminal.",
+              "OpenCode CLI history only — ignores requests the extension tracked itself.",
+              "Extension-tracked requests only — ignores the OpenCode CLI history."
+            ],
+            "default": "auto",
+            "description": "Data source for the Today / Yesterday usage rows."
+          },
+          "opencodego.usageCodebaseRow": {
+            "type": "boolean",
+            "default": true,
+            "description": "Show the all-time usage row for the current workspace (Codebase), computed from the OpenCode CLI history (per-directory `path.cwd` of each session's messages)."
+          },
+          "opencodego.usageCodebaseWindowDays": {
+            "type": "number",
+            "default": 0,
+            "minimum": 0,
+            "maximum": 3650,
+            "description": "How many days of history the Codebase row covers. 0 = forever (all history)."
+          },
+          "opencodego.usageRollingSessionMeter": {
+            "type": "boolean",
+            "default": true,
+            "description": "Show the server-accurate 5-hour rolling session meter in the usage tooltip, quick-pick and panel. Weekly and monthly meters are always shown."
+          },
+          "opencodego.usageRefreshIntervalSeconds": {
+            "type": "number",
+            "default": 60,
+            "minimum": 5,
+            "maximum": 3600,
+            "description": "How often the usage status bar and panel refresh in the background (seconds). Terminal-side (OpenCode CLI) usage and server meters are re-read on this cadence; values below the 60s server-sync TTL only refresh the local CLI history rows."
+          },
+          "opencodego.usageChartDays": {
+            "type": "number",
+            "default": 0,
+            "minimum": 0,
+            "maximum": 370,
+            "description": "How many days the usage panel charts cover (daily spend / requests / tokens, per-model and chat-completion breakdowns). 0 = lifetime. The panel's Window button toggles this live (Week / 14 days / Month / Lifetime)."
+          },
+          "opencodego.usageDayBoundary": {
+            "type": "string",
+            "enum": [
+              "utc",
+              "local"
+            ],
+            "enumDescriptions": [
+              "Today / Yesterday rows roll over at midnight UTC.",
+              "Today / Yesterday rows roll over at your local midnight."
+            ],
+            "default": "utc",
+            "description": "Day boundary used for the Today / Yesterday usage rows."
+          },
+          "opencodego.temperature": {
+            "type": "number",
+            "default": 0.2,
+            "minimum": 0,
+            "maximum": 2,
+            "description": "Sampling temperature used for chat completions."
+          },
+          "opencodego.apiBaseUrl": {
+            "type": "string",
+            "default": "https://opencode.ai/zen/go/v1",
+            "description": "Base URL for the OpenCode Go-compatible API. The extension appends /models, /chat/completions, /messages, /responses, and /usage. Requires a window reload after changing."
+          },
+          "opencodezen.apiBaseUrl": {
+            "type": "string",
+            "default": "https://opencode.ai/zen/v1",
+            "description": "Base URL for the OpenCode Zen-compatible API. The extension appends /models, /chat/completions, /messages, and /responses. Requires a window reload after changing."
+          },
+          "opencodego.maxTokens": {
+            "type": "number",
+            "default": 0,
+            "minimum": 0,
+            "description": "Optional max output token override. Use 0 to request each OpenCode model's configured maximum."
+          },
+          "opencodego.maxInputTokens": {
+            "type": "number",
+            "default": 0,
+            "minimum": 0,
+            "description": "Optional context size override advertised to VS Code. Use 0 to advertise each OpenCode model's configured context window."
+          },
+          "opencodego.debugReasoning": {
+            "type": "boolean",
+            "default": false,
+            "description": "Write provider reasoning_content to the OpenCode output channel for debugging. Reasoning is not shown in Copilot Chat."
+          },
+          "opencodego.requestTimeoutSeconds": {
+            "type": "number",
+            "default": 600,
+            "minimum": 1,
+            "description": "Total request timeout in seconds for OpenCode Go and Zen chat requests. Prevents long-running Copilot requests from hanging indefinitely."
+          },
+          "opencodego.streamIdleTimeoutSeconds": {
+            "type": "number",
+            "default": 120,
+            "minimum": 1,
+            "description": "Streaming idle timeout in seconds. If OpenCode stops sending response chunks for this long, the request is cancelled with a clear error."
+          },
+          "opencodego.showUsageStatusBar": {
+            "type": "boolean",
+            "default": true,
+            "description": "Show the latest OpenCode prompt/output/cache usage summary in the VS Code status bar after each response."
+          },
+          "opencodego.showProviderPrefix": {
+            "type": "boolean",
+            "default": true,
+            "description": "Show the OpenCode Go or OpenCode Zen provider prefix in model names."
+          },
+          "opencodego.visionProxyWholeConversation": {
+            "type": "boolean",
+            "default": false,
+            "description": "Off (default): describe only the message with a new image and reuse cached image descriptions to save quota. On: describe the whole conversation for richer context (uses more tokens; descriptions are still cached)."
+          },
+          "opencodego.freeOnly": {
+            "type": "boolean",
+            "default": true,
+            "description": "When enabled, only free OpenCode Zen models are shown in the Copilot model selector. Disable to include paid Zen models as well."
+          },
+          "opencodego.enabled": {
+            "type": "boolean",
+            "default": true,
+            "markdownDescription": "Register the OpenCode Go provider. Set to `false` to remove OpenCode Go from the Language Models list and all model pickers (like deleting the provider in GitHub Copilot's Manage Language Models). Models you previously configured stay in your language-models config so they come back if you re-enable. Requires a window reload to take effect."
+          },
+          "opencodezen.enabled": {
+            "type": "boolean",
+            "default": true,
+            "markdownDescription": "Register the OpenCode Zen provider. Set to `false` to remove OpenCode Zen from the Language Models list and all model pickers (like deleting the provider in GitHub Copilot's Manage Language Models). Models you previously configured stay in your language-models config so they come back if you re-enable. Requires a window reload to take effect."
+          },
+          "opencodego.agentsWindow": {
+            "type": "boolean",
+            "default": true,
+            "markdownDescription": "Enable OpenCode models in the VS Code Agents window. On VS Code 1.129+ this enables VS Code's BYOK model bridge (`chat.agentHost.byokModels.enabled`) so OpenCode Go/Zen models run in agent-host sessions; on all versions it also opts the extension in to run in the Agents window process (`extensions.supportAgentsWindow`) so OpenCode Go/Zen appear in the Agents window's '+ Add Models' list. Both core settings are auto-managed (see `#opencodego.autoEnableAgentsWindow#`). Disable to hide the Agents section entirely and revert the auto-managed settings. Requires a window reload to take effect."
+          },
+          "opencodego.autoEnableAgentsWindow": {
+            "type": "boolean",
+            "default": true,
+            "markdownDescription": "When `#opencodego.agentsWindow#` is on, automatically enable the VS Code core settings the Agents window support depends on: `chat.agentHost.byokModels.enabled` (BYOK model bridge, experimental, off by default) and `extensions.supportAgentsWindow: { \"ltmoerdani.everything-copilot-chat\": true }` (without this the extension is disabled in the Agents window process and its providers, including the '+ Add Models' vendors, are missing). The extension records the values it flips and reverts them when `agentsWindow` is disabled. A window reload is required after the first auto-enable. Disable to manage those settings manually."
+          },
+          "opencodego.showAgentModelsInManagePanel": {
+            "type": "boolean",
+            "default": false,
+            "markdownDescription": "Show agent-host vendors in the Manage Language Models panel. When disabled (default), agent models still work in the Agents window but are hidden from the Manage panel to reduce clutter."
+          },
+          "opencodego.inlineSuggestions": {
+            "type": "boolean",
+            "default": false,
+            "markdownDescription": "Enable ghost-text inline code suggestions while typing (experimental). Suggestions run through the OpenCode gateway with **thinking forced off** for low latency; non-thinking models (e.g. `qwen3.5-plus`) are recommended. Requires a window reload after enabling."
+          },
+          "opencodego.inlineSuggestionsModel": {
+            "type": "string",
+            "enum": [
+              "qwen3.5-plus",
+              "qwen3.6-plus",
+              "qwen3.7-plus",
+              "deepseek-v4-flash"
+            ],
+            "enumDescriptions": [
+              "Fastest verified option: enable_thinking=false yields ~1.5s with zero hidden reasoning.",
+              "Qwen3.6 hybrid — same non-thinking mode, slightly larger context budget.",
+              "Qwen3.7 hybrid — newest Qwen on OpenCode Go, same non-thinking behavior.",
+              "Works but measurably slower — burns hidden reasoning tokens even with thinking off (~2s+)."
+            ],
+            "default": "qwen3.5-plus",
+            "markdownDescription": "Model used for inline code suggestions. Prefer the non-thinking Qwen options — measured: `qwen3.5-plus` with `enable_thinking=false` returns in ~1.5s with zero hidden reasoning, while reasoning models (e.g. `deepseek-v4-flash`) burn 100+ reasoning tokens even with thinking off."
+          },
+          "opencodego.inlineSuggestionsChatInput": {
+            "type": "boolean",
+            "default": false,
+            "description": "Also offer inline suggestions inside the GitHub Copilot Chat prompt box while typing prompts. Off by default — completions are meant for code editors."
+          },
+          "opencodego.inlineSuggestionsDebounceMs": {
+            "type": "number",
+            "default": 300,
+            "minimum": 50,
+            "maximum": 2000,
+            "markdownDescription": "Delay after the last keystroke before an inline suggestion is requested. Lower = snappier but more requests; higher = fewer requests but slower appearance."
+          },
+          "opencodego.inlineSuggestionsTimeoutMs": {
+            "type": "number",
+            "default": 3000,
+            "minimum": 500,
+            "maximum": 15000,
+            "markdownDescription": "Maximum time an inline suggestion request may take before it is abandoned (the ghost text then simply doesn't appear)."
+          },
+          "opencodego.inlineSuggestionsMaxTokens": {
+            "type": "number",
+            "default": 128,
+            "minimum": 16,
+            "maximum": 1024,
+            "markdownDescription": "Maximum tokens a completion may produce. Shorter = faster; longer = more complete suggestions."
+          },
+          "opencodego.inlineSuggestionsPrefixLines": {
+            "type": "number",
+            "default": 10,
+            "minimum": 1,
+            "maximum": 100,
+            "markdownDescription": "Context window: how many lines before the cursor are sent with each suggestion request. More context = better completions, slightly slower."
+          },
+          "opencodego.inlineSuggestionsSuffixChars": {
+            "type": "number",
+            "default": 300,
+            "minimum": 0,
+            "maximum": 5000,
+            "markdownDescription": "Context window: how many characters after the cursor are sent with each suggestion request (0 disables the suffix)."
+          },
+          "opencodego.stripThinkTags": {
+            "type": "string",
+            "enum": [
+              "never",
+              "auto",
+              "always"
+            ],
+            "default": "auto",
+            "markdownDescription": "How to handle `<think>...</think>` tags in model output. `auto` strips tags only for known reasoning models that inline thinking in the content field (minimax), accumulating the extracted reasoning content into the existing reasoning fallback. `always` strips for every model. `never` passes text through unchanged (use if a model legitimately uses `<think>` in its output)."
+          },
+          "opencodego.thinking.deepseek": {
+            "type": "string",
+            "enum": [
+              "off",
+              "low",
+              "medium",
+              "high",
+              "max"
+            ],
+            "default": "off",
+            "markdownDescription": "Thinking mode for DeepSeek models (`deepseek-v4-flash`, `deepseek-v4-pro`). Maps to `reasoning_effort`. `low`/`medium`/`high` adjust reasoning depth; `max` enables maximum reasoning."
+          },
+          "opencodego.thinking.glm": {
+            "type": "string",
+            "enum": [
+              "off",
+              "high",
+              "max"
+            ],
+            "default": "off",
+            "markdownDescription": "Thinking mode for GLM models. `high`/`max` enable thinking (interpreted as `on` for models that use toggle, e.g., GLM 5/5.1). Per-model picker shows only options supported by each model."
+          },
+          "opencodego.thinking.kimi": {
+            "type": "string",
+            "enum": [
+              "on",
+              "off"
+            ],
+            "default": "off",
+            "markdownDescription": "Thinking mode for Kimi models (`kimi-k2.5`, `kimi-k2.6`). Maps to `thinking: { type: 'enabled' | 'disabled' }`."
+          },
+          "opencodego.thinking.minimax": {
+            "type": "string",
+            "enum": [
+              "off",
+              "on"
+            ],
+            "default": "off",
+            "markdownDescription": "Thinking mode for MiniMax models (`minimax-m2.5`, `minimax-m3`, etc.). Maps to `thinking: { type: 'disabled'|'adaptive'|'enabled' }`. The OpenCode gateway only supports on/off for this family (`reasoning_effort` is silently ignored)."
+          },
+          "opencodego.thinking.openai": {
+            "type": "string",
+            "enum": [
+              "off",
+              "low",
+              "medium",
+              "high",
+              "xhigh"
+            ],
+            "default": "off",
+            "markdownDescription": "Thinking mode for OpenAI GPT models such as GPT-5.6 Luna. Maps to the Responses API `reasoning.effort` field. Higher effort increases reasoning depth and may increase latency and usage."
+          },
+          "opencodego.thinking.mimo": {
+            "type": "string",
+            "enum": [
+              "off",
+              "low",
+              "medium",
+              "high"
+            ],
+            "default": "off",
+            "markdownDescription": "Thinking mode for Mimo (Xiaomi) models. Maps to `reasoning_effort`. `low`/`medium`/`high` adjust reasoning depth."
+          },
+          "opencodego.thinking.qwen": {
+            "type": "string",
+            "enum": [
+              "auto",
+              "on",
+              "off"
+            ],
+            "default": "off",
+            "markdownDescription": "Thinking mode for Qwen models (`qwen3.5-plus`, `qwen3.6-plus`, `qwen3.6-plus-free`). Maps to `enable_thinking`. `auto` lets the model decide (omits the flag), `on`/`off` force-enable or disable hybrid thinking. Off is the recommended default to avoid empty Copilot replies."
+          },
+          "opencodego.thinking.qwenBudget": {
+            "type": "string",
+            "enum": [
+              "auto",
+              "4096",
+              "16384",
+              "32768",
+              "81920"
+            ],
+            "default": "auto",
+            "markdownDescription": "Optional `thinking_budget` for Qwen models when thinking is `on` or `auto`. `auto` omits the field. Ignored when Qwen thinking is `off`."
+          },
+          "opencodego.thinking.muse": {
+            "type": "string",
+            "enum": [
+              "off",
+              "low",
+              "medium",
+              "high",
+              "xhigh"
+            ],
+            "default": "off",
+            "markdownDescription": "Thinking mode for Muse Spark models (`muse-spark-1.2-contributor`, `muse-spark-1.2-contributor-free`). Maps to the Responses API `reasoning.effort` field. Higher effort increases reasoning depth and may increase latency and usage."
+          }
+        }
+      },
+      {
+        "title": "Volcengine Ark",
+        "properties": {
+          "volcengineArk.apiBaseUrl": {
+            "type": "string",
+            "default": "https://ark.cn-beijing.volces.com/api/coding/v3",
+            "description": "Base URL for the Volcengine Ark coding plan (OpenAI-compatible). The extension appends /chat/completions. Requires a window reload after changing."
+          },
+          "volcengineArk.models": {
+            "type": "string",
+            "default": "",
+            "description": "Comma-separated model IDs for the Volcengine Ark coding plan (e.g. `doubao-seed-evolving,deepseek-v4-flash`). Empty uses the built-in default list."
+          },
+          "volcengineArk.enabled": {
+            "type": "boolean",
+            "default": true,
+            "markdownDescription": "Register the Volcengine Ark provider. Set to `false` to remove Volcengine Ark from the Language Models list and all model pickers (like deleting the provider in GitHub Copilot's Manage Language Models). Models you previously configured stay in your language-models config so they come back if you re-enable. Requires a window reload to take effect."
+          }
+        }
+      },
+      {
+        "title": "Qianwen AI",
+        "properties": {
+          "qianwenai.apiBaseUrl": {
+            "type": "string",
+            "default": "https://token-plan.cn-beijing.maas.aliyuncs.com/apps/anthropic",
+            "description": "Base URL for the Qianwen AI Anthropic-compatible Messages API. The extension appends /v1/messages. Requires a window reload after changing."
+          },
+          "qianwenai.modelsBaseUrl": {
+            "type": "string",
+            "default": "https://token-plan.cn-beijing.maas.aliyuncs.com/compatible-mode/v1",
+            "description": "Base URL for the Qianwen AI OpenAI-compatible endpoint used to fetch the live model list. The extension appends /models. Requires a window reload after changing."
+          },
+          "qianwenai.models": {
+            "type": "string",
+            "default": "",
+            "description": "Comma-separated model IDs used as a fallback if the live model list cannot be fetched (e.g. `qwen-max,qwen-plus`). Empty uses the built-in default list."
+          },
+          "qianwenai.enabled": {
+            "type": "boolean",
+            "default": true,
+            "markdownDescription": "Register the Qianwen AI provider. Set to `false` to remove Qianwen AI from the Language Models list and all model pickers (like deleting the provider in GitHub Copilot's Manage Language Models). Models you previously configured stay in your language-models config so they come back if you re-enable. Requires a window reload to take effect."
+          }
+        }
+      }
+    ],
+    "languageModelChatProviders": [
+      {
+        "vendor": "opencodego",
+        "displayName": "OpenCode Go",
+        "when": "config.opencodego.enabled",
+        "configuration": {
+          "type": "object",
+          "required": [
+            "apiKey"
+          ],
+          "properties": {
+            "apiKey": {
+              "type": "string",
+              "title": "OpenCode Go API Key",
+              "description": "Enter your OpenCode Go API key.",
+              "secret": true
+            }
+          }
+        }
+      },
+      {
+        "vendor": "opencodezen",
+        "displayName": "OpenCode Zen",
+        "when": "config.opencodezen.enabled",
+        "configuration": {
+          "type": "object",
+          "required": [
+            "apiKey"
+          ],
+          "properties": {
+            "apiKey": {
+              "type": "string",
+              "title": "OpenCode Zen API Key",
+              "description": "Enter your OpenCode Zen API key.",
+              "secret": true
+            }
+          }
+        }
+      },
+      {
+        "vendor": "volcengineArk",
+        "displayName": "Volcengine Ark",
+        "when": "config.volcengineArk.enabled",
+        "configuration": {
+          "type": "object",
+          "required": [
+            "apiKey"
+          ],
+          "properties": {
+            "apiKey": {
+              "type": "string",
+              "title": "Volcengine Ark API Key",
+              "description": "Enter your Volcengine Ark (coding plan) API key.",
+              "secret": true
+            }
+          }
+        }
+      },
+      {
+        "vendor": "qianwenai",
+        "displayName": "Qianwen AI",
+        "when": "config.qianwenai.enabled",
+        "configuration": {
+          "type": "object",
+          "required": [
+            "apiKey"
+          ],
+          "properties": {
+            "apiKey": {
+              "type": "string",
+              "title": "Qianwen AI API Key",
+              "description": "Enter your Qianwen AI (Alibaba token-plan) API key.",
+              "secret": true
+            }
+          }
+        }
+      },
+      {
+        "vendor": "opencodego-agent",
+        "displayName": "OpenCode Go (Agents)",
+        "when": "config.opencodego.showAgentModelsInManagePanel"
+      },
+      {
+        "vendor": "opencodezen-agent",
+        "displayName": "OpenCode Zen (Agents)",
+        "when": "config.opencodego.showAgentModelsInManagePanel"
+      },
+      {
+        "vendor": "volcengineArk-agent",
+        "displayName": "Volcengine Ark (Agents)",
+        "when": "config.opencodego.showAgentModelsInManagePanel"
+      },
+      {
+        "vendor": "qianwenai-agent",
+        "displayName": "Qianwen AI (Agents)",
+        "when": "config.opencodego.showAgentModelsInManagePanel"
+      }
+    ]
+  },
+  "scripts": {
+    "lint": "tsx scripts/lint.ts",
+    "lint:staged": "tsx scripts/staged-lint.ts",
+    "lint:js": "eslint . --max-warnings 0",
+    "lint:fix": "eslint . --fix --max-warnings 0",
+    "lint:md": "markdownlint-cli2 --config .markdownlint-cli2.json \"**/*.md\" \"#node_modules\"",
+    "lint:md:all": "markdownlint-cli2 --config .markdownlint-cli2.json \"**/*.md\"",
+    "lint:sh": "shellcheck .husky/pre-commit",
+    "lint:hygiene": "editorconfig-checker",
+    "lint:ts": "tsc -p tsconfig.check.json",
+    "format": "tsx scripts/format.ts",
+    "format:js": "eslint . --fix --max-warnings 0",
+    "format:prettier": "npx prettier --write . --ignore-path .gitignore",
+    "format:check": "npx prettier --check . --ignore-path .gitignore",
+    "clean": "node -e \"require('node:fs').rmSync('out', { recursive: true, force: true })\"",
+    "compile": "npm run clean && tsc -p ./",
+    "test": "npm run compile && tsx scripts/run-unit-tests.ts",
+    "watch": "npm run clean && tsc -watch -p ./",
+    "validate-models": "tsx scripts/validate-models.ts",
+    "test-retry": "tsx scripts/test-retry-e2e.ts",
+    "prepackage": "npm test",
+    "package": "vsce package",
+    "vscode:prepublish": "npm run compile",
+    "prepare": "husky"
+  },
+  "lint-staged": {
+    "*": "prettier --check --ignore-unknown",
+    "*.{js,cjs,ts}": "eslint --max-warnings 0",
+    "*.md": "markdownlint-cli2 --config .markdownlint-cli2.json",
+    ".husky/*": "shellcheck"
+  },
+  "devDependencies": {
+    "@types/node": "^26.2.0",
+    "@types/vscode": "^1.125.0",
+    "@vscode/vsce": "^3.9.2",
+    "editorconfig-checker": "^6.1.1",
+    "eslint": "^10.8.1",
+    "eslint-plugin-jsonc": "^3.4.1",
+    "eslint-plugin-yml": "^3.8.1",
+    "husky": "^9.1.7",
+    "jiti": "^2.7.0",
+    "lint-staged": "^17.3.0",
+    "markdownlint-cli2": "^0.23.2",
+    "picocolors": "^1.1.1",
+    "prettier": "^3.9.6",
+    "shellcheck": "^4.1.0",
+    "tsx": "^4.23.12",
+    "typescript": "^6.0.3",
+    "typescript-eslint": "^8.66.0"
+  },
+  "dependencies": {
+    "@silvia-odwyer/photon-node": "^0.3.4"
+  }
+}

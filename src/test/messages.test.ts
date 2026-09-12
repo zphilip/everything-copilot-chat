@@ -1,0 +1,215 @@
+import assert from "node:assert/strict";
+import { describe, it } from "node:test";
+import { historyByteCapForBudget, trimOldMessagesToFitContext } from "../provider/historyTrim.js";
+import { HISTORY_BYTES_PER_TOKEN, MAX_REQUEST_PAYLOAD_BYTES } from "../config.js";
+import type { ApiMessage } from "../request/types.js";
+
+function textMessage(role: ApiMessage["role"], text: string): ApiMessage {
+  return { role, content: text };
+}
+
+/** Effectively disables the byte-cap constraint so a test can focus on tokens. */
+const NO_BYTE_CAP = Number.MAX_SAFE_INTEGER;
+
+describe("trimOldMessagesToFitContext", () => {
+  it("removes nothing when the history already fits the budget", () => {
+    const messages: ApiMessage[] = [
+      textMessage("user", "system context"),
+      textMessage("user", "hello"),
+      textMessage("assistant", "hi there"),
+    ];
+    const result = trimOldMessagesToFitContext(messages, 10_000, NO_BYTE_CAP);
+    assert.equal(result.removed, 0);
+    assert.equal(messages.length, 3);
+  });
+
+  it("drops oldest messages until the payload fits, keeping anchor + last", () => {
+    const messages: ApiMessage[] = [];
+    messages.push(textMessage("user", "anchor system prompt that is fairly long to count as context"));
+    for (let i = 0; i < 12; i++) {
+      messages.push(textMessage("user", `repeated turn number ${i} with some padding text to grow the token estimate`));
+      messages.push(textMessage("assistant", `response for turn ${i} with padding text to grow the token estimate`));
+    }
+    messages.push(textMessage("user", "latest prompt that must be preserved at all costs"));
+    const before = messages.length;
+    const result = trimOldMessagesToFitContext(messages, 200, NO_BYTE_CAP);
+    assert.ok(result.removed > 0, "should have trimmed");
+    assert.equal(messages.length, before - result.removed);
+    // anchor (index 0) and last (current prompt) preserved
+    assert.equal(messages[0].content, "anchor system prompt that is fairly long to count as context");
+    assert.equal(messages[messages.length - 1].content, "latest prompt that must be preserved at all costs");
+  });
+
+  it("drops a complete tool-call group as one unit (never orphans a reference)", () => {
+    const messages: ApiMessage[] = [
+      textMessage("user", "anchor"),
+      textMessage("user", "old turn A padding padding padding padding padding padding padding"),
+      textMessage("user", "old turn B padding padding padding padding padding padding padding"),
+      {
+        role: "assistant",
+        content: "let me call a tool",
+        tool_calls: [{ id: "call_1", type: "function", function: { name: "fs", arguments: "{}" } }],
+      },
+      { role: "tool", tool_call_id: "call_1", content: "tool result text" },
+      textMessage("user", "current prompt"),
+    ];
+    const result = trimOldMessagesToFitContext(messages, 50, NO_BYTE_CAP);
+    // The whole tool group (assistant + its tool result) is dropped together,
+    // so no tool reference is orphaned.
+    assert.ok(result.removed >= 0);
+    const hasToolCall = messages.some((m) => m.role === "assistant" && Array.isArray(m.tool_calls) && m.tool_calls.length > 0);
+    const hasToolResult = messages.some((m) => m.role === "tool");
+    assert.equal(hasToolCall, hasToolResult, "tool group must stay intact (both present or both gone)");
+  });
+
+  it("does not trim when only anchor + last remain", () => {
+    const messages: ApiMessage[] = [textMessage("user", "anchor"), textMessage("user", "only prompt")];
+    const result = trimOldMessagesToFitContext(messages, 1, NO_BYTE_CAP);
+    assert.equal(result.removed, 0);
+    assert.equal(messages.length, 2);
+  });
+
+  it("enforces a hard byte cap even when the token budget is generous", () => {
+    const messages: ApiMessage[] = [];
+    messages.push(textMessage("user", "anchor system prompt that is fairly long to count as context"));
+    for (let i = 0; i < 20; i++) {
+      messages.push(textMessage("user", `repeated turn number ${i} with some padding text to grow the payload size substantially`));
+      messages.push(textMessage("assistant", `response for turn ${i} with padding text to grow the payload size substantially`));
+    }
+    messages.push(textMessage("user", "latest prompt that must be preserved at all costs"));
+    const before = messages.length;
+    // Token budget is huge, but the byte cap is tiny → must still trim.
+    const result = trimOldMessagesToFitContext(messages, 10_000_000, 400);
+    assert.ok(result.removed > 0, "byte cap should have trimmed");
+    assert.equal(messages.length, before - result.removed);
+    assert.equal(messages[0].content, "anchor system prompt that is fairly long to count as context");
+    assert.equal(messages[messages.length - 1].content, "latest prompt that must be preserved at all costs");
+    // The actual wire payload (no tools in this test) must be under the cap.
+    assert.ok(JSON.stringify({ messages }).length <= 400, "payload must be under the byte cap");
+  });
+
+  it("returns the final token and byte estimates", () => {
+    const messages: ApiMessage[] = [
+      textMessage("user", "anchor"),
+      textMessage("user", "old turn padding padding padding padding padding padding padding padding padding padding"),
+      textMessage("user", "current prompt"),
+    ];
+    const result = trimOldMessagesToFitContext(messages, 10, NO_BYTE_CAP);
+    assert.ok(result.finalTokens > 0);
+    assert.ok(result.finalBytes > 0);
+    assert.equal(result.removed, 1);
+  });
+
+  it("never drops the anchor or the current prompt turn", () => {
+    const messages: ApiMessage[] = [];
+    messages.push(textMessage("user", "ANCHOR-CONTEXT"));
+    for (let i = 0; i < 30; i++) {
+      messages.push(textMessage("user", `middle turn ${i} padding padding padding padding padding padding padding padding`));
+    }
+    messages.push(textMessage("user", "CURRENT-PROMPT"));
+    const result = trimOldMessagesToFitContext(messages, 5, 200);
+    assert.equal(messages[0].content, "ANCHOR-CONTEXT");
+    assert.equal(messages[messages.length - 1].content, "CURRENT-PROMPT");
+    assert.ok(result.removed > 0);
+  });
+});
+
+describe("historyByteCapForBudget", () => {
+  it("returns the 512KB floor for small budgets", () => {
+    assert.equal(historyByteCapForBudget(10_000), MAX_REQUEST_PAYLOAD_BYTES);
+    assert.equal(historyByteCapForBudget(50_000), MAX_REQUEST_PAYLOAD_BYTES);
+    // 100K tokens * 4.5 = 450KB < 512KB → still floor
+    assert.equal(historyByteCapForBudget(100_000), MAX_REQUEST_PAYLOAD_BYTES);
+  });
+
+  it("scales linearly above the floor", () => {
+    // 200K tokens * 4.5 = 900KB > 512KB → scaled
+    assert.equal(historyByteCapForBudget(200_000), Math.floor(200_000 * HISTORY_BYTES_PER_TOKEN));
+    assert.equal(historyByteCapForBudget(734_003), Math.floor(734_003 * HISTORY_BYTES_PER_TOKEN));
+  });
+
+  it("allows a 1M window to reach ~70% without byte-cap clamping", () => {
+    // 1M window → inputBudget ≈ 734K (70% ratio), byte cap ≈ 3.3MB
+    const inputBudget = Math.floor(1_048_576 * 0.7);
+    const byteCap = historyByteCapForBudget(inputBudget);
+    assert.ok(byteCap > 3_000_000, `1M window byte cap should exceed 3MB, got ${byteCap}`);
+    // Token budget remains the limiter: byte cap in token-equivalents >> inputBudget
+    assert.ok(byteCap / HISTORY_BYTES_PER_TOKEN > inputBudget * 0.95);
+  });
+
+  it("keeps the byte cap looser than the token budget across all window sizes", () => {
+    for (const window of [128_000, 200_000, 262_144, 512_000, 1_048_576, 1_050_000]) {
+      const inputBudget = Math.floor(window * 0.7);
+      const byteCap = historyByteCapForBudget(inputBudget);
+      // Byte cap expressed in tokens must cover the token budget (allow 1-token floor rounding).
+      const byteCapTokens = byteCap / HISTORY_BYTES_PER_TOKEN;
+      assert.ok(byteCapTokens + 1 >= inputBudget, `window ${window}: byte cap ${byteCap} too tight for budget ${inputBudget}`);
+    }
+  });
+});
+
+describe("trimOldMessagesToFitContext — image data excluded from byte cap (#173)", () => {
+  const IMAGE_PLACEHOLDER_LEN = "[image]".length;
+  /** ~1MB base64-ish image payload — far above MAX_REQUEST_PAYLOAD_BYTES. */
+  function imageMessage(role: ApiMessage["role"], dataLength: number): ApiMessage {
+    return { role, content: [{ type: "image_url", image_url: { url: `data:image/png;base64,${"A".repeat(dataLength)}` } }] };
+  }
+
+  it("does not trim text history just because images push the raw payload over the byte cap", () => {
+    const messages: ApiMessage[] = [
+      textMessage("user", "anchor system prompt that is fairly long to count as context"),
+      imageMessage("user", 600_000),
+      textMessage("assistant", "short reply"),
+      textMessage("user", "current prompt"),
+    ];
+    // Raw wire bytes are way above 512KB, but almost all of it is image data.
+    assert.ok(JSON.stringify({ messages }).length > 512_000);
+    const result = trimOldMessagesToFitContext(messages, 10_000_000, 512 * 1024);
+    assert.equal(result.removed, 0, "text history must survive");
+    assert.equal(messages.length, 4);
+  });
+
+  it("still trims when the TEXT portion alone exceeds the byte cap", () => {
+    const messages: ApiMessage[] = [];
+    messages.push(textMessage("user", "anchor system prompt that is fairly long to count as context"));
+    for (let i = 0; i < 20; i++) {
+      messages.push(textMessage("user", `repeated turn ${i} with plenty of padding to grow the text payload size substantially`));
+      messages.push(textMessage("assistant", `response for turn ${i} with plenty of padding to grow the text payload size substantially`));
+    }
+    messages.push(imageMessage("user", 300_000));
+    messages.push(textMessage("user", "latest prompt that must be preserved at all costs"));
+    const before = messages.length;
+    const result = trimOldMessagesToFitContext(messages, 10_000_000, 400);
+    assert.ok(result.removed > 0, "oversized text history must still be trimmed");
+    assert.equal(messages.length, before - result.removed);
+    assert.equal(messages[0].content, "anchor system prompt that is fairly long to count as context");
+    assert.equal(messages[messages.length - 1].content, "latest prompt that must be preserved at all costs");
+  });
+
+  it("counts hosted image URLs fully — only data: URLs are stripped", () => {
+    const url = "https://example.com/i.png";
+    const messages: ApiMessage[] = [
+      textMessage("user", "anchor"),
+      { role: "user", content: [{ type: "image_url", image_url: { url } }] },
+      textMessage("user", "current prompt"),
+    ];
+    const result = trimOldMessagesToFitContext(messages, 10_000_000, 512 * 1024);
+    assert.equal(result.removed, 0);
+    // The hosted URL is plain text of trivial size: its full serialized length
+    // must appear in finalBytes (not collapsed to the [image] placeholder).
+    assert.ok(result.finalBytes >= JSON.stringify({ messages }).length);
+    assert.ok(result.finalBytes > url.length + IMAGE_PLACEHOLDER_LEN);
+  });
+
+  it("strips every data: URL regardless of size", () => {
+    const messages: ApiMessage[] = [
+      textMessage("user", "anchor"),
+      { role: "user", content: [{ type: "image_url", image_url: { url: "data:image/png;base64,iVBOR" } }] },
+      textMessage("user", "current prompt"),
+    ];
+    const result = trimOldMessagesToFitContext(messages, 10_000_000, 512 * 1024);
+    assert.equal(result.removed, 0);
+    // The tiny data URL was replaced by the placeholder in the measurement.
+    assert.ok(result.finalBytes < JSON.stringify({ messages }).length);
+  });
+});
