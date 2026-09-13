@@ -6,6 +6,8 @@
 
 One picker, four providers — **OpenCode Go** · **OpenCode Zen** · **Volcengine Ark** · **Qianwen AI** — so you can route each chat to the cheapest capable model.
 
+A fork of **[opencode-copilot-chat](https://github.com/ltmoerdani/opencode-copilot-chat)**.
+
 [![CI](https://github.com/zphilip/everything-copilot-chat/actions/workflows/ci.yml/badge.svg)](https://github.com/zphilip/everything-copilot-chat/actions/workflows/ci.yml)
 [![VS Code Marketplace](https://img.shields.io/badge/Install-VS%20Code%20Marketplace-007ACC?logo=visualstudiocode&logoColor=white)](https://marketplace.visualstudio.com/items?itemName=ltmoerdani.everything-copilot-chat)
 [![Version](https://img.shields.io/github/v/release/zphilip/everything-copilot-chat?label=Version&color=6c47ff)](https://github.com/zphilip/everything-copilot-chat/releases)
@@ -20,11 +22,11 @@ One picker, four providers — **OpenCode Go** · **OpenCode Zen** · **Volcengi
 
 ---
 
+> 🍴 **Built as a fork of [opencode-copilot-chat](https://github.com/ltmoerdani/opencode-copilot-chat)** — the original OpenCode BYOK bridge — extended with **Volcengine Ark** and **Qianwen AI** as extra plan-based providers. For OpenCode Go/Zen specifics, see the [upstream project](https://github.com/ltmoerdani/opencode-copilot-chat).
+
 > **💡 The pitch**
 >
 > Copilot Chat is great, but its premium models cost $39/mo (Pro+) and the free tier is rate-limited. This extension plugs multiple **model gateways** into the Copilot Chat model picker. You keep the native Copilot UI, tool-calling, and Agent Mode — you just get a **much wider model catalog**, and you can pick the **cheapest provider per task**.
-
-> 🍴 **Fork of [opencode-copilot-chat](https://github.com/ltmoerdani/opencode-copilot-chat)** — with **Volcengine Ark** and **Qianwen AI** added as plan-based BYOK providers alongside OpenCode Go/Zen. For OpenCode Go/Zen specifics, see the [upstream project](https://github.com/ltmoerdani/opencode-copilot-chat).
 
 ---
 
