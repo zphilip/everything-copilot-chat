@@ -223,7 +223,7 @@ npm run package  # build .vsix
 [![X / Twitter](https://img.shields.io/badge/X-Share-orange?logo=x)](https://twitter.com/intent/tweet?text=Using%2030%2B%20AI%20models%20in%20GitHub%20Copilot%20Chat%20for%20free%20with%20BYOK!&url=https://github.com/zphilip/everything-copilot-chat&hashtags=vscode,copilot,ai,byok,opencode)
 [![Reddit](https://img.shields.io/badge/Reddit-Share-orange?logo=reddit)](https://www.reddit.com/submit?url=https://github.com/zphilip/everything-copilot-chat&title=Everything%20Copilot%20Chat)
 
-**If this saves you money or unlocks a model you needed — ⭐ star the repo and share it!**
+**If this saves you money or unlocks a model you needed — [⭐ star the repo and share it!](https://github.com/zphilip/everything-copilot-chat)**
 
 ---
 
