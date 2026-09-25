@@ -23,7 +23,7 @@ A fork of **[opencode-copilot-chat](https://github.com/ltmoerdani/opencode-copil
 ---
 
 > 🍴 **Built as a fork of [opencode-copilot-chat](https://github.com/ltmoerdani/opencode-copilot-chat)** — the original OpenCode BYOK bridge — extended with **Volcengine Ark** and **Qianwen AI** as extra plan-based providers. For OpenCode Go/Zen specifics, see the [upstream project](https://github.com/ltmoerdani/opencode-copilot-chat).
-
+>
 > **💡 The pitch**
 >
 > Copilot Chat is great, but its premium models cost $39/mo (Pro+) and the free tier is rate-limited. This extension plugs multiple **model gateways** into the Copilot Chat model picker. You keep the native Copilot UI, tool-calling, and Agent Mode — you just get a **much wider model catalog**, and you can pick the **cheapest provider per task**.
@@ -34,12 +34,12 @@ A fork of **[opencode-copilot-chat](https://github.com/ltmoerdani/opencode-copil
 
 The extension registers each provider as a separate vendor in VS Code's **Chat → Manage Language Models**. Any provider can be enabled, disabled, or removed from the picker independently — your API keys are kept, so re-enabling restores everything.
 
-| Provider | What it is | Cost model | Endpoints |
-| -------- | ---------- | ---------- | --------- |
-| **OpenCode Go** | OpenCode's subscription gateway for curated open models (DeepSeek V4, Kimi K3, GLM-5.2, Qwen3.8 Max, MiMo V2.5, MiniMax M3) | $10/mo subscription (5h/$12 · weekly/$30 · monthly/$60) | OpenAI + Anthropic compatible |
-| **OpenCode Zen** | OpenCode's free-tier + pay-as-you-go gateway (Claude, GPT-5.x, Gemini, Grok, DeepSeek, rotating free models) | Free models + pay-per-token premium | OpenAI + Anthropic compatible |
-| **Volcengine Ark** | Volcengine's coding-plan endpoint (Doubao Seed, GLM-5.3, MiniMax M3, DeepSeek V4, Kimi K2.7) | Coding-plan subscription | OpenAI-compatible (`/chat/completions`) |
-| **Qianwen AI** | Alibaba's token-plan MaaS for Qwen models (`qwen-max`, `qwen-plus`, `qwen-turbo`) | Token-plan subscription | Anthropic-compatible (`/v1/messages`) |
+| Provider           | What it is                                                                                                                  | Cost model                                              | Endpoints                               |
+| ------------------ | --------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------- | --------------------------------------- |
+| **OpenCode Go**    | OpenCode's subscription gateway for curated open models (DeepSeek V4, Kimi K3, GLM-5.2, Qwen3.8 Max, MiMo V2.5, MiniMax M3) | $10/mo subscription (5h/$12 · weekly/$30 · monthly/$60) | OpenAI + Anthropic compatible           |
+| **OpenCode Zen**   | OpenCode's free-tier + pay-as-you-go gateway (Claude, GPT-5.x, Gemini, Grok, DeepSeek, rotating free models)                | Free models + pay-per-token premium                     | OpenAI + Anthropic compatible           |
+| **Volcengine Ark** | Volcengine's coding-plan endpoint (Doubao Seed, GLM-5.3, MiniMax M3, DeepSeek V4, Kimi K2.7)                                | Coding-plan subscription                                | OpenAI-compatible (`/chat/completions`) |
+| **Qianwen AI**     | Alibaba's token-plan MaaS for Qwen models (`qwen-max`, `qwen-plus`, `qwen-turbo`)                                           | Token-plan subscription                                 | Anthropic-compatible (`/v1/messages`)   |
 
 > 💸 **Why plan-based providers?** Per-token pricing on frontier models adds up fast during long agentic sessions. **Volcengine Ark** (coding plan) and **Qianwen AI** (token plan) let you use the same underlying models under a flat plan instead of per-token metering — wire them once and route heavy workloads there.
 
@@ -103,6 +103,7 @@ Live list with these built-in fallbacks (overridable via `qianwenai.models`):
 9. Select any model from the picker and start chatting. 🚀
 
 > **💡 Tips:**
+>
 > - Providers are **independent groups** — add several and switch anytime from the picker.
 > - If a model shows in **Language Models** but not the chat picker, hover its row and click the **eye icon (👁)** to enable it.
 > - Set `opencodego.freeOnly: false` to reveal paid OpenCode Zen models in the picker.
@@ -130,21 +131,21 @@ Live list with these built-in fallbacks (overridable via `qianwenai.models`):
 
 All settings live under the `opencodego.*`, `volcengineArk.*`, and `qianwenai.*` namespaces. Key ones:
 
-| Setting | Default | Description |
-| ------- | ------- | ----------- |
-| `opencodego.apiBaseUrl` | `https://opencode.ai/zen/go/v1` | Base URL for the Go-compatible gateway |
-| `opencodezen.apiBaseUrl` | `https://opencode.ai/zen/v1` | Base URL for the Zen-compatible gateway |
-| `volcengineArk.apiBaseUrl` | `https://ark.cn-beijing.volces.com/api/coding/v3` | Volcengine Ark coding-plan base URL (OpenAI-compatible) |
-| `volcengineArk.models` | _(built-in list)_ | Comma-separated model-ID override |
-| `qianwenai.apiBaseUrl` | `https://token-plan.cn-beijing.maas.aliyuncs.com/apps/anthropic` | Qianwen Anthropic-compatible Messages API base URL |
-| `qianwenai.modelsBaseUrl` | `https://token-plan.cn-beijing.maas.aliyuncs.com/compatible-mode/v1` | Qianwen live-model-list base URL |
-| `qianwenai.models` | _(built-in list)_ | Comma-separated model-ID fallback |
-| `opencodego.freeOnly` | `true` | Zen: free models only. `false` = include paid |
-| `opencodego.temperature` | `0.2` | Sampling temperature (`0`–`2`) |
-| `opencodego.maxTokens` / `maxInputTokens` | `0` | Max output / context override (`0` = per-model default) |
-| `opencodego.stripThinkTags` | `auto` | Strip `thinking` tags (`never`/`auto`/`always`) |
-| `opencodego.agentsWindow` | `true` | Expose agent-host model variants for the Agents window |
-| `opencodego.thinking.*` | `off` | Per-family reasoning effort defaults |
+| Setting                                   | Default                                                              | Description                                             |
+| ----------------------------------------- | -------------------------------------------------------------------- | ------------------------------------------------------- |
+| `opencodego.apiBaseUrl`                   | `https://opencode.ai/zen/go/v1`                                      | Base URL for the Go-compatible gateway                  |
+| `opencodezen.apiBaseUrl`                  | `https://opencode.ai/zen/v1`                                         | Base URL for the Zen-compatible gateway                 |
+| `volcengineArk.apiBaseUrl`                | `https://ark.cn-beijing.volces.com/api/coding/v3`                    | Volcengine Ark coding-plan base URL (OpenAI-compatible) |
+| `volcengineArk.models`                    | _(built-in list)_                                                    | Comma-separated model-ID override                       |
+| `qianwenai.apiBaseUrl`                    | `https://token-plan.cn-beijing.maas.aliyuncs.com/apps/anthropic`     | Qianwen Anthropic-compatible Messages API base URL      |
+| `qianwenai.modelsBaseUrl`                 | `https://token-plan.cn-beijing.maas.aliyuncs.com/compatible-mode/v1` | Qianwen live-model-list base URL                        |
+| `qianwenai.models`                        | _(built-in list)_                                                    | Comma-separated model-ID fallback                       |
+| `opencodego.freeOnly`                     | `true`                                                               | Zen: free models only. `false` = include paid           |
+| `opencodego.temperature`                  | `0.2`                                                                | Sampling temperature (`0`–`2`)                          |
+| `opencodego.maxTokens` / `maxInputTokens` | `0`                                                                  | Max output / context override (`0` = per-model default) |
+| `opencodego.stripThinkTags`               | `auto`                                                               | Strip `thinking` tags (`never`/`auto`/`always`)         |
+| `opencodego.agentsWindow`                 | `true`                                                               | Expose agent-host model variants for the Agents window  |
+| `opencodego.thinking.*`                   | `off`                                                                | Per-family reasoning effort defaults                    |
 
 Run **Preferences: Open Settings (UI)** and search `opencode` / `volcengine` / `qianwen` for the full list.
 
@@ -154,11 +155,11 @@ Run **Preferences: Open Settings (UI)** and search `opencode` / `volcengine` / `
 
 Run these from the **Command Palette** (`Cmd/Ctrl+Shift+P`). Most are registered **per provider** — `OpenCode Go`, `OpenCode Zen`, `Volcengine Ark`, and `Qianwen AI` each expose the same set:
 
-| Group | Commands |
-| ----- | -------- |
+| Group                 | Commands                                                                                                                                                                                                                                                                                                           |
+| --------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
 | **Per provider** (×4) | `…: Manage Provider` — test connection, refresh models, configure utility models<br>`…: Refresh Models` — force a fresh model-list fetch<br>`…: Diagnostics` — markdown report of models + recent request summaries<br>`…: Remove/Re-add Provider in Language Models` — toggle the provider off/on in every picker |
-| **Cross-provider** | `OpenCode: Model Picker Diagnostics` — all registered models side-by-side<br>`OpenCode: Configure Utility Models` — utility-task model settings<br>`OpenCode: Set Thinking Effort…` — per-family reasoning picker |
-| **OpenCode Go** | `OpenCode Go: Show Usage Details` · `…: Show Usage Quick Pick` · `…: Set Usage Targets…` · `…: Rename Active Profile` · `…: Delete Profile` — subscription metering & profiles<br>`OpenCode Go: Configure Vision Proxy` — pick a vision model so text-only models can "see" images |
+| **Cross-provider**    | `OpenCode: Model Picker Diagnostics` — all registered models side-by-side<br>`OpenCode: Configure Utility Models` — utility-task model settings<br>`OpenCode: Set Thinking Effort…` — per-family reasoning picker                                                                                                  |
+| **OpenCode Go**       | `OpenCode Go: Show Usage Details` · `…: Show Usage Quick Pick` · `…: Set Usage Targets…` · `…: Rename Active Profile` · `…: Delete Profile` — subscription metering & profiles<br>`OpenCode Go: Configure Vision Proxy` — pick a vision model so text-only models can "see" images                                 |
 
 ---
 

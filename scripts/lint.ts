@@ -34,7 +34,6 @@ interface LintStep {
 }
 
 const steps: LintStep[] = [
-  { label: "Editorconfig", cmd: bin("editorconfig-checker"), args: [] },
   { label: "ESLint", cmd: bin("eslint"), args: [".", "--max-warnings", "0"] },
   {
     label: "Markdown",

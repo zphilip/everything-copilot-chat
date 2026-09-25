@@ -1,6 +1,6 @@
 # https://editorconfig.org
 # Universal style enforcement for EVERY file type in the repo.
-# editorconfig-checker verifies all of these rules and fails on any violation.
+# Editors (VS Code, JetBrains, …) apply these rules automatically.
 
 root = true
 

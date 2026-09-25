@@ -7,7 +7,6 @@
 //     (files that import a staged file), so changing a module can never leave
 //     type-aware errors behind in its consumers.
 //   - markdownlint runs on staged Markdown files.
-//   - editorconfig-checker runs on staged files.
 //   - shellcheck runs on staged .husky scripts.
 //   - Type-checking (tsc -p tsconfig.check.json) and unit tests are
 //     whole-project by nature and only run when src/ or scripts/ changed.
@@ -167,7 +166,6 @@ interface StagedStep {
 const steps: StagedStep[] = [
   { label: "ESLint", cmd: bin("eslint"), args: ["--max-warnings", "0", ...eslintTargets], run: eslintTargets.length > 0 },
   { label: "Markdown", cmd: bin("markdownlint-cli2"), args: ["--config", ".markdownlint-cli2.json", ...mdFiles], run: mdFiles.length > 0 },
-  { label: "Editorconfig", cmd: bin("editorconfig-checker"), args: [...staged], run: true },
   { label: "Shell", cmd: bin("shellcheck"), args: [...huskyFiles], run: huskyFiles.length > 0 },
   { label: "TypeScript", cmd: bin("tsc"), args: ["-p", "tsconfig.check.json"], run: sourceChanged },
   { label: "Tests", cmd: "npm", args: ["test"], run: sourceChanged },

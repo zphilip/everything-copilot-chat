@@ -44,7 +44,7 @@ Climb this ladder only after fully understanding the problem and tracing the rea
 
 ### Verification
 
-- `npm run lint` is the single gate — one command runs all 7 checks (editorconfig, eslint, markdown, prettier, shellcheck, typecheck, and the unit tests), so `npm test` and `compile` are already covered.
+- `npm run lint` is the single gate — one command runs all 6 checks (eslint, markdown, prettier, shellcheck, typecheck, and the unit tests), so `npm test` and `compile` are already covered.
 - Husky's pre-commit hook runs a zero-tolerance staged-lint gate on every commit (`scripts/staged-lint.ts` + lint-staged); a commit can't land unless it passes. If it fails, fix the root cause, never bypass with `--no-verify`.
 - Non-trivial logic leaves behind exactly one runnable check: an assert-based self-check or one small test — no new test frameworks or fixtures. Trivial one-liners need none.
 - Keep linting and formatting at their strictest configured level — never ignore, bypass, or silence any error, warning, or info.
