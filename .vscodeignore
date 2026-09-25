@@ -5,7 +5,10 @@
 .prettierrc.json
 .vscode/**
 .vscode-test/**
-docs/**/*.md
+.notes/**
+docs/**
+AGENTS.md
+ARCHITECTURE-MAP.md
 eslint.config.ts
 node_modules/**
 !node_modules/@silvia-odwyer/
@@ -20,6 +23,7 @@ scripts/**
 src/**
 *.vsix
 tsconfig.json
+tsconfig.check.json
 package-lock.json
 media/opencodego.svg
 tmp/**

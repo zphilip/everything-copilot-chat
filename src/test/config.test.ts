@@ -74,7 +74,7 @@ function expectValue<T, A extends unknown[]>(
 describe("config — identity", () => {
   it("carries the extension identity", () => {
     assert.equal(CONFIG_SECTION, "opencodego");
-    assert.equal(EXTENSION_ID, "ltmoerdani.everything-copilot-chat");
+    assert.equal(EXTENSION_ID, "aiwormcn.everything-copilot-chat");
     assert.equal(SECRET_KEY, "opencodego.apiKey");
     expectValue("FALLBACK_USER_AGENT", FALLBACK_USER_AGENT, (v) => v.startsWith("everything-copilot-chat/"), "versioned prefix");
   });

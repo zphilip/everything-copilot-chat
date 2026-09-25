@@ -16,7 +16,7 @@
 // ─── Extension identity ──────────────────────────────────────────────────────
 
 /** VS Code extension ID (used for `extensions.supportAgentsWindow.<id>`). */
-export const EXTENSION_ID = "ltmoerdani.everything-copilot-chat";
+export const EXTENSION_ID = "aiwormcn.everything-copilot-chat";
 /** SecretStorage key for the OpenCode Go API key (legacy name preserved). */
 export const SECRET_KEY = "opencodego.apiKey";
 /** SecretStorage key for the OpenCode Zen API key (per-vendor, so Go and Zen
@@ -36,7 +36,7 @@ export function secretKeyFor(vendor: "opencodego" | "opencodezen" | "volcengineA
 /** Client name sent in the `x-opencode-client` header. */
 export const OPEN_CODE_CLIENT = "vscode-copilot-chat";
 /** Fallback only — overridden at runtime from packageJSON.version. */
-export const FALLBACK_USER_AGENT = "everything-copilot-chat/0.6.0 VSCode";
+export const FALLBACK_USER_AGENT = "everything-copilot-chat/0.1.0 VSCode";
 /** Configuration section under which all extension settings live. */
 export const CONFIG_SECTION = "opencodego";
 

@@ -9,7 +9,7 @@ One picker, four providers — **OpenCode Go** · **OpenCode Zen** · **Volcengi
 A fork of **[opencode-copilot-chat](https://github.com/ltmoerdani/opencode-copilot-chat)**.
 
 [![CI](https://github.com/zphilip/everything-copilot-chat/actions/workflows/ci.yml/badge.svg)](https://github.com/zphilip/everything-copilot-chat/actions/workflows/ci.yml)
-[![VS Code Marketplace](https://img.shields.io/badge/Install-VS%20Code%20Marketplace-007ACC?logo=visualstudiocode&logoColor=white)](https://marketplace.visualstudio.com/items?itemName=ltmoerdani.everything-copilot-chat)
+[![VS Code Marketplace](https://img.shields.io/badge/Install-VS%20Code%20Marketplace-007ACC?logo=visualstudiocode&logoColor=white)](https://marketplace.visualstudio.com/items?itemName=aiwormcn.everything-copilot-chat)
 [![Version](https://img.shields.io/github/v/release/zphilip/everything-copilot-chat?label=Version&color=6c47ff)](https://github.com/zphilip/everything-copilot-chat/releases)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](./LICENSE)
 [![VS Code](https://img.shields.io/badge/VS%20Code-1.125%2B-007ACC?logo=visualstudiocode&logoColor=white)](https://code.visualstudio.com/)
