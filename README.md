@@ -4,7 +4,7 @@
 
 **Use 30+ frontier AI models in GitHub Copilot Chat — Bring Your Own Key (BYOK).** No Copilot Pro needed.
 
-One picker, four providers — **OpenCode Go** · **OpenCode Zen** · **Volcengine Ark** · **Qianwen AI** — so you can route each chat to the cheapest capable model.
+One picker, five providers — **OpenCode Go** · **OpenCode Zen** · **Volcengine Ark** · **Qianwen AI** · **Xiaomi MiMo** — so you can route each chat to the cheapest capable model.
 
 A fork of **[opencode-copilot-chat](https://github.com/ltmoerdani/opencode-copilot-chat)**.
 
@@ -22,7 +22,7 @@ A fork of **[opencode-copilot-chat](https://github.com/ltmoerdani/opencode-copil
 
 ---
 
-> 🍴 **Built as a fork of [opencode-copilot-chat](https://github.com/ltmoerdani/opencode-copilot-chat)** — the original OpenCode BYOK bridge — extended with **Volcengine Ark** and **Qianwen AI** as extra plan-based providers. For OpenCode Go/Zen specifics, see the [upstream project](https://github.com/ltmoerdani/opencode-copilot-chat).
+> 🍴 **Built as a fork of [opencode-copilot-chat](https://github.com/ltmoerdani/opencode-copilot-chat)** — the original OpenCode BYOK bridge — extended with **Volcengine Ark**, **Qianwen AI**, and **Xiaomi MiMo** as extra plan-based providers. For OpenCode Go/Zen specifics, see the [upstream project](https://github.com/ltmoerdani/opencode-copilot-chat).
 >
 > **💡 The pitch**
 >
@@ -40,14 +40,15 @@ The extension registers each provider as a separate vendor in VS Code's **Chat �
 | **OpenCode Zen**   | OpenCode's free-tier + pay-as-you-go gateway (Claude, GPT-5.x, Gemini, Grok, DeepSeek, rotating free models)                | Free models + pay-per-token premium                     | OpenAI + Anthropic compatible           |
 | **Volcengine Ark** | Volcengine's coding-plan endpoint (Doubao Seed, GLM-5.3, MiniMax M3, DeepSeek V4, Kimi K2.7)                                | Coding-plan subscription                                | OpenAI-compatible (`/chat/completions`) |
 | **Qianwen AI**     | Alibaba's token-plan MaaS for Qwen models (`qwen-max`, `qwen-plus`, `qwen-turbo`)                                           | Token-plan subscription                                 | Anthropic-compatible (`/v1/messages`)   |
+| **Xiaomi MiMo**    | Xiaomi's token-plan MaaS for MiMo models (`mimo-v2.5`, `mimo-v2.5-pro`, `mimo-v2-omni`, `mimo-v2-pro`)                      | Token-plan subscription                                 | Anthropic-compatible (`/v1/messages`)   |
 
-> 💸 **Why plan-based providers?** Per-token pricing on frontier models adds up fast during long agentic sessions. **Volcengine Ark** (coding plan) and **Qianwen AI** (token plan) let you use the same underlying models under a flat plan instead of per-token metering — wire them once and route heavy workloads there.
+> 💸 **Why plan-based providers?** Per-token pricing on frontier models adds up fast during long agentic sessions. **Volcengine Ark** (coding plan), **Qianwen AI** (token plan), and **Xiaomi MiMo** (token plan) let you use the same underlying models under a flat plan instead of per-token metering — wire them once and route heavy workloads there.
 
 ---
 
 ## 🧠 Models
 
-Models are fetched **live** from each provider on startup (Qianwen AI exposes a live `/models` list; Volcengine Ark uses a static list because its coding plan has no `/models` endpoint), with a bundled offline fallback.
+Models are fetched **live** from each provider on startup (Qianwen AI and Xiaomi MiMo expose a live `/models` list; Volcengine Ark uses a static list because its coding plan has no `/models` endpoint), with a bundled offline fallback.
 
 ### OpenCode Go (subscription)
 
@@ -69,6 +70,12 @@ Live list with these built-in fallbacks (overridable via `qianwenai.models`):
 
 `qwen-max` · `qwen-plus` · `qwen-turbo` · `qwen-max-latest` · `qwen-plus-latest`
 
+### Xiaomi MiMo (token plan)
+
+Live list with these built-in fallbacks (overridable via `xiaomimimo.models`):
+
+`mimo-v2.5` · `mimo-v2.5-pro` · `mimo-v2-omni` · `mimo-v2-pro`
+
 > **Context & output limits** resolve per model (live metadata → `models.dev` snapshot → bundled fallback). Deprecated/unavailable models are filtered from the picker automatically.
 
 ---
@@ -88,6 +95,7 @@ Live list with these built-in fallbacks (overridable via `qianwenai.models`):
 - **OpenCode Go / Zen** — sign up at [opencode.ai](https://opencode.ai). Zen starts free (rotating free models); Go is a $10/mo subscription.
 - **Volcengine Ark** — Volcengine console → coding plan → create an API key.
 - **Qianwen AI** — Alibaba Cloud Model Studio → token-plan MaaS → create an API key.
+- **Xiaomi MiMo** — Xiaomi token-plan gateway → create an API key.
 
 <details>
 <summary><b>📖 Detailed step-by-step</b></summary>
@@ -97,7 +105,7 @@ Live list with these built-in fallbacks (overridable via `qianwenai.models`):
 3. Get an API key from one of the providers above.
 4. Open **Copilot Chat** (Cmd/Ctrl+Shift+I).
 5. Click the **model picker** → **Add Models…**
-6. Select **OpenCode Go**, **OpenCode Zen**, **Volcengine Ark**, or **Qianwen AI**.
+6. Select **OpenCode Go**, **OpenCode Zen**, **Volcengine Ark**, **Qianwen AI**, or **Xiaomi MiMo**.
 7. **Paste your API key** when prompted (stored by VS Code in its encrypted language-models storage — it never leaves your machine).
 8. Pick the models you want enabled.
 9. Select any model from the picker and start chatting. 🚀
@@ -129,7 +137,7 @@ Live list with these built-in fallbacks (overridable via `qianwenai.models`):
 
 ## 🔧 Settings
 
-All settings live under the `opencodego.*`, `volcengineArk.*`, and `qianwenai.*` namespaces. Key ones:
+All settings live under the `opencodego.*`, `volcengineArk.*`, `qianwenai.*`, and `xiaomimimo.*` namespaces. Key ones:
 
 | Setting                                   | Default                                                              | Description                                             |
 | ----------------------------------------- | -------------------------------------------------------------------- | ------------------------------------------------------- |
@@ -140,6 +148,9 @@ All settings live under the `opencodego.*`, `volcengineArk.*`, and `qianwenai.*`
 | `qianwenai.apiBaseUrl`                    | `https://token-plan.cn-beijing.maas.aliyuncs.com/apps/anthropic`     | Qianwen Anthropic-compatible Messages API base URL      |
 | `qianwenai.modelsBaseUrl`                 | `https://token-plan.cn-beijing.maas.aliyuncs.com/compatible-mode/v1` | Qianwen live-model-list base URL                        |
 | `qianwenai.models`                        | _(built-in list)_                                                    | Comma-separated model-ID fallback                       |
+| `xiaomimimo.apiBaseUrl`                   | `https://token-plan-cn.xiaomimimo.com/anthropic`                     | Xiaomi MiMo Anthropic-compatible Messages API base URL  |
+| `xiaomimimo.modelsBaseUrl`                | `https://token-plan-cn.xiaomimimo.com/v1`                            | Xiaomi MiMo live-model-list base URL                    |
+| `xiaomimimo.models`                       | _(built-in list)_                                                    | Comma-separated model-ID fallback                       |
 | `opencodego.freeOnly`                     | `true`                                                               | Zen: free models only. `false` = include paid           |
 | `opencodego.temperature`                  | `0.2`                                                                | Sampling temperature (`0`–`2`)                          |
 | `opencodego.maxTokens` / `maxInputTokens` | `0`                                                                  | Max output / context override (`0` = per-model default) |
@@ -147,17 +158,17 @@ All settings live under the `opencodego.*`, `volcengineArk.*`, and `qianwenai.*`
 | `opencodego.agentsWindow`                 | `true`                                                               | Expose agent-host model variants for the Agents window  |
 | `opencodego.thinking.*`                   | `off`                                                                | Per-family reasoning effort defaults                    |
 
-Run **Preferences: Open Settings (UI)** and search `opencode` / `volcengine` / `qianwen` for the full list.
+Run **Preferences: Open Settings (UI)** and search `opencode` / `volcengine` / `qianwen` / `xiaomimimo` for the full list.
 
 ---
 
 ## 🎛️ Commands
 
-Run these from the **Command Palette** (`Cmd/Ctrl+Shift+P`). Most are registered **per provider** — `OpenCode Go`, `OpenCode Zen`, `Volcengine Ark`, and `Qianwen AI` each expose the same set:
+Run these from the **Command Palette** (`Cmd/Ctrl+Shift+P`). Most are registered **per provider** — `OpenCode Go`, `OpenCode Zen`, `Volcengine Ark`, `Qianwen AI`, and `Xiaomi MiMo` each expose the same set:
 
 | Group                 | Commands                                                                                                                                                                                                                                                                                                           |
 | --------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
-| **Per provider** (×4) | `…: Manage Provider` — test connection, refresh models, configure utility models<br>`…: Refresh Models` — force a fresh model-list fetch<br>`…: Diagnostics` — markdown report of models + recent request summaries<br>`…: Remove/Re-add Provider in Language Models` — toggle the provider off/on in every picker |
+| **Per provider** (×5) | `…: Manage Provider` — test connection, refresh models, configure utility models<br>`…: Refresh Models` — force a fresh model-list fetch<br>`…: Diagnostics` — markdown report of models + recent request summaries<br>`…: Remove/Re-add Provider in Language Models` — toggle the provider off/on in every picker |
 | **Cross-provider**    | `OpenCode: Model Picker Diagnostics` — all registered models side-by-side<br>`OpenCode: Configure Utility Models` — utility-task model settings<br>`OpenCode: Set Thinking Effort…` — per-family reasoning picker                                                                                                  |
 | **OpenCode Go**       | `OpenCode Go: Show Usage Details` · `…: Show Usage Quick Pick` · `…: Set Usage Targets…` · `…: Rename Active Profile` · `…: Delete Profile` — subscription metering & profiles<br>`OpenCode Go: Configure Vision Proxy` — pick a vision model so text-only models can "see" images                                 |
 
@@ -232,7 +243,7 @@ npm run package  # build .vsix
 
 [MIT](./LICENSE) © 2026 [ltmoerdani](https://github.com/ltmoerdani), [zphilip](https://github.com/zphilip)
 
-OpenCode is a trademark of [opencode.ai](https://opencode.ai). This project is independent and not affiliated with GitHub, Microsoft, Anthropic, OpenAI, Google, Alibaba, Volcengine, or any model provider.
+OpenCode is a trademark of [opencode.ai](https://opencode.ai). This project is independent and not affiliated with GitHub, Microsoft, Anthropic, OpenAI, Google, Alibaba, Volcengine, Xiaomi, or any model provider.
 
 <div align="center">
 

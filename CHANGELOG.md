@@ -1,14 +1,15 @@
 # Changelog
 
-All notable changes to the **Everything Copilot Chat** extension — a fork of [opencode-copilot-chat](https://github.com/ltmoerdani/opencode-copilot-chat) adding **Volcengine Ark** and **Qianwen AI** providers — are documented here.
+All notable changes to the **Everything Copilot Chat** extension — a fork of [opencode-copilot-chat](https://github.com/ltmoerdani/opencode-copilot-chat) adding **Volcengine Ark**, **Qianwen AI**, and **Xiaomi MiMo** providers — are documented here.
 
 ## [Unreleased]
 
 ### Added
 
-- **`[Providers]` Fork adds Volcengine Ark + Qianwen AI BYOK providers.**
+- **`[Providers]` Fork adds Volcengine Ark + Qianwen AI + Xiaomi MiMo BYOK providers.**
   - **Volcengine Ark** — Volcengine's coding-plan endpoint (OpenAI-compatible), its own `volcengineArk.apiKey`, and a static model list overridable via `volcengineArk.models`.
   - **Qianwen AI** — Alibaba's token-plan MaaS (Qwen models), its own `qianwenai.apiKey`, Anthropic-compatible chat routing (`apps/anthropic/v1/messages`), and a live model list from the OpenAI-compatible endpoint (`compatible-mode/v1/models`).
+  - **Xiaomi MiMo** — Xiaomi's token-plan MaaS (MiMo models), its own `xiaomimimo.apiKey`, Anthropic-compatible chat routing (`anthropic/v1/messages`), and a live model list from the OpenAI-compatible endpoint (`v1/models`).
 
 ## [0.7.3] — 2026-08-28
 

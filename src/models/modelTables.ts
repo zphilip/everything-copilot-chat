@@ -1,4 +1,4 @@
-import { GO_VENDOR, ZEN_VENDOR, VOLC_VENDOR, QIANWEN_VENDOR, type ProviderVendor } from "../providerTypes";
+import { GO_VENDOR, ZEN_VENDOR, VOLC_VENDOR, QIANWEN_VENDOR, MIMO_VENDOR, type ProviderVendor } from "../providerTypes";
 import type { BaseModelLimits } from "./metadata";
 
 /**
@@ -86,6 +86,13 @@ export const MODEL_LIMITS_BY_PROVIDER: Record<ProviderVendor, Record<string, Bas
   // configured; model IDs are user-provided via `volcengineArk.models`.
   [VOLC_VENDOR]: {},
   [QIANWEN_VENDOR]: {},
+  // Xiaomi MiMo token-plan models (Anthropic Messages API).
+  [MIMO_VENDOR]: {
+    "mimo-v2.5": { contextWindow: 1000000, maxOutputTokens: 128000 },
+    "mimo-v2.5-pro": { contextWindow: 1048576, maxOutputTokens: 128000 },
+    "mimo-v2-omni": { contextWindow: 262144, maxOutputTokens: 128000 },
+    "mimo-v2-pro": { contextWindow: 1048576, maxOutputTokens: 128000 },
+  },
 };
 
 /**

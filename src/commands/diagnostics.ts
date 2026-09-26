@@ -2,10 +2,12 @@ import * as vscode from "vscode";
 import { CONFIG_SECTION, SETTING_AGENTS_WINDOW } from "../config";
 import {
   AGENT_GO_VENDOR,
+  AGENT_MIMO_VENDOR,
   AGENT_QIANWEN_VENDOR,
   AGENT_VOLC_VENDOR,
   AGENT_ZEN_VENDOR,
   GO_VENDOR,
+  MIMO_VENDOR,
   QIANWEN_VENDOR,
   VOLC_VENDOR,
   ZEN_VENDOR,
@@ -13,9 +15,9 @@ import {
 
 /** Dump every visible model + configuration schema into a Markdown doc. */
 export async function showModelPickerDiagnostics(): Promise<void> {
-  const vendors: string[] = [GO_VENDOR, ZEN_VENDOR, VOLC_VENDOR, QIANWEN_VENDOR, "copilot"];
+  const vendors: string[] = [GO_VENDOR, ZEN_VENDOR, VOLC_VENDOR, QIANWEN_VENDOR, MIMO_VENDOR, "copilot"];
   if (vscode.workspace.getConfiguration(CONFIG_SECTION).get<boolean>(SETTING_AGENTS_WINDOW, true)) {
-    vendors.splice(4, 0, AGENT_GO_VENDOR, AGENT_ZEN_VENDOR, AGENT_VOLC_VENDOR, AGENT_QIANWEN_VENDOR);
+    vendors.splice(5, 0, AGENT_GO_VENDOR, AGENT_ZEN_VENDOR, AGENT_VOLC_VENDOR, AGENT_QIANWEN_VENDOR, AGENT_MIMO_VENDOR);
   }
   const sections: string[] = [];
 

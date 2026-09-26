@@ -123,6 +123,17 @@ export const MODEL_REGISTRY: ModelRegistryEntry[] = [
     sdkPackage: "@ai-sdk/openai-compatible",
     thinkingFamily: "kimi",
   },
+  // Xiaomi MiMo token-plan — every mimo model is served through the Anthropic
+  // Messages API (token-plan-cn.xiaomimimo.com/anthropic). Vendor-restricted so
+  // the Go/Zen mimo models keep the universal chat-completions row below.
+  {
+    family: "mimo-messages",
+    patterns: [/^mimo-/i],
+    endpointKind: "messages",
+    sdkPackage: "@ai-sdk/anthropic",
+    thinkingFamily: "mimo",
+    vendors: ["xiaomimimo"],
+  },
   {
     family: "mimo",
     patterns: [/^mimo-/i],

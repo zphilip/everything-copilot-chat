@@ -1,5 +1,5 @@
 import { isFreeModel, type ResolvedModelMetadata } from "../models/metadata";
-import { GO_VENDOR, ZEN_VENDOR, QIANWEN_VENDOR, resolveBaseVendor } from "../providerTypes";
+import { GO_VENDOR, ZEN_VENDOR, QIANWEN_VENDOR, MIMO_VENDOR, resolveBaseVendor } from "../providerTypes";
 import type { ProviderDefinition } from "../provider/definitions";
 
 /**
@@ -51,7 +51,16 @@ export function modelPricingFields(
   // shows something instead of pretending we know the price. Agent-host
   // variants resolve to their base vendor so they label correctly too.
   const baseVendor = resolveBaseVendor(vendor);
-  const planLabel = baseVendor === GO_VENDOR ? "Go" : baseVendor === ZEN_VENDOR ? "Zen" : baseVendor === QIANWEN_VENDOR ? "Qianwen" : "Ark";
+  const planLabel =
+    baseVendor === GO_VENDOR
+      ? "Go"
+      : baseVendor === ZEN_VENDOR
+        ? "Zen"
+        : baseVendor === QIANWEN_VENDOR
+          ? "Qianwen"
+          : baseVendor === MIMO_VENDOR
+            ? "MiMo"
+            : "Ark";
   return {
     pricing: `${planLabel} subscription`,
   };

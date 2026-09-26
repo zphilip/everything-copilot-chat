@@ -12,10 +12,12 @@ import {
 } from "../config";
 import {
   AGENT_GO_VENDOR,
+  AGENT_MIMO_VENDOR,
   AGENT_QIANWEN_VENDOR,
   AGENT_VOLC_VENDOR,
   AGENT_ZEN_VENDOR,
   GO_VENDOR,
+  MIMO_VENDOR,
   QIANWEN_VENDOR,
   VOLC_VENDOR,
   ZEN_VENDOR,
@@ -133,9 +135,10 @@ export async function warmModelPickerMetadata(): Promise<void> {
     ...(vscode.workspace.getConfiguration().get<boolean>(providerEnabledSetting(ZEN_VENDOR), true) ? [ZEN_VENDOR] : []),
     ...(vscode.workspace.getConfiguration().get<boolean>(providerEnabledSetting(VOLC_VENDOR), true) ? [VOLC_VENDOR] : []),
     ...(vscode.workspace.getConfiguration().get<boolean>(providerEnabledSetting(QIANWEN_VENDOR), true) ? [QIANWEN_VENDOR] : []),
+    ...(vscode.workspace.getConfiguration().get<boolean>(providerEnabledSetting(MIMO_VENDOR), true) ? [MIMO_VENDOR] : []),
   ];
   if (vscode.workspace.getConfiguration(CONFIG_SECTION).get<boolean>(SETTING_AGENTS_WINDOW, true) && vendors.length > 0) {
-    vendors.push(AGENT_GO_VENDOR, AGENT_ZEN_VENDOR, AGENT_VOLC_VENDOR, AGENT_QIANWEN_VENDOR);
+    vendors.push(AGENT_GO_VENDOR, AGENT_ZEN_VENDOR, AGENT_VOLC_VENDOR, AGENT_QIANWEN_VENDOR, AGENT_MIMO_VENDOR);
   }
   await Promise.allSettled(vendors.map((v) => vscode.lm.selectChatModels({ vendor: v })));
 }

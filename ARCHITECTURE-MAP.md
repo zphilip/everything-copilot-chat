@@ -12,7 +12,7 @@
 
 ## Overview
 
-This is the **navigation map** for the `everything-copilot-chat` codebase — a fork of `opencode-copilot-chat` with added **Volcengine Ark** and **Qianwen AI** providers. It answers, in one place:
+This is the **navigation map** for the `everything-copilot-chat` codebase — a fork of `opencode-copilot-chat` with added **Volcengine Ark**, **Qianwen AI**, and **Xiaomi MiMo** providers. It answers, in one place:
 
 - Which domain owns which folder / file (and how big each is).
 - How modules depend on each other (so you never touch module A without checking module B).
@@ -228,20 +228,21 @@ flowchart TD
 
 `src/core/registry.ts` — the single table that decides **transport** + **thinking family** for a model id. Adding a model family = adding ONE row (optionally + a thinking class). Evaluated **in table order, first match wins** (specific patterns before generic ones).
 
-| Family        | Pattern                                                   | endpointKind       | thinkingFamily | Vendor restriction                         |
-| ------------- | --------------------------------------------------------- | ------------------ | -------------- | ------------------------------------------ |
-| GPT           | `/^gpt-/i`                                                | `responses`        | `openai`       | any                                        |
-| Claude        | `/^claude-/i`                                             | `messages`         | `null`         | any                                        |
-| MiniMax m2.x  | `/^minimax-m2\./i`                                        | `messages`         | `minimax`      | `opencodego` only (Zen → chat-completions) |
-| Qwen Messages | `/^qwen3\.(?:5\|6)-plus(?:-free)?$/` · `/^qwen3\.7-max$/` | `messages`         | `qwen`         | any                                        |
-| Gemini        | `/^gemini-/i`                                             | `google`           | `null`         | `opencodezen` only                         |
-| MiniMax       | `/^minimax-/i`                                            | `chat-completions` | `minimax`      | any                                        |
-| DeepSeek      | `/^deepseek-/i`                                           | `chat-completions` | `deepseek`     | any                                        |
-| GLM           | `/^glm-/i`                                                | `chat-completions` | `glm`          | any                                        |
-| Kimi          | `/^kimi-/i`                                               | `chat-completions` | `kimi`         | any                                        |
-| MiMo          | `/^mimo-/i`                                               | `chat-completions` | `mimo`         | any                                        |
-| Qwen          | `/^qwen3(?:\.\|-)/i`                                      | `chat-completions` | `qwen`         | any                                        |
-| **default**   | `/.*/`                                                    | `chat-completions` | `null`         | any (catch-all)                            |
+| Family        | Pattern                                                   | endpointKind       | thinkingFamily | Vendor restriction                            |
+| ------------- | --------------------------------------------------------- | ------------------ | -------------- | --------------------------------------------- |
+| GPT           | `/^gpt-/i`                                                | `responses`        | `openai`       | any                                           |
+| Claude        | `/^claude-/i`                                             | `messages`         | `null`         | any                                           |
+| MiniMax m2.x  | `/^minimax-m2\./i`                                        | `messages`         | `minimax`      | `opencodego` only (Zen → chat-completions)    |
+| Qwen Messages | `/^qwen3\.(?:5\|6)-plus(?:-free)?$/` · `/^qwen3\.7-max$/` | `messages`         | `qwen`         | any                                           |
+| Gemini        | `/^gemini-/i`                                             | `google`           | `null`         | `opencodezen` only                            |
+| MiniMax       | `/^minimax-/i`                                            | `chat-completions` | `minimax`      | any                                           |
+| DeepSeek      | `/^deepseek-/i`                                           | `chat-completions` | `deepseek`     | any                                           |
+| GLM           | `/^glm-/i`                                                | `chat-completions` | `glm`          | any                                           |
+| Kimi          | `/^kimi-/i`                                               | `chat-completions` | `kimi`         | any                                           |
+| MiMo (Xiaomi) | `/^mimo-/i`                                               | `messages`         | `mimo`         | `xiaomimimo` only (Go/Zen → chat-completions) |
+| MiMo          | `/^mimo-/i`                                               | `chat-completions` | `mimo`         | any                                           |
+| Qwen          | `/^qwen3(?:\.\|-)/i`                                      | `chat-completions` | `qwen`         | any                                           |
+| **default**   | `/.*/`                                                    | `chat-completions` | `null`         | any (catch-all)                               |
 
 > **Scope note:** context limits / capabilities / cost are **NOT** in this table — they stay metadata-driven (live models.dev via `src/models/metadata.ts`). Do not duplicate them into a static table.
 
@@ -462,10 +463,10 @@ On push/PR to `main`/`develop`, Node 20: `npm ci` → `compile` → `lint` (with
 
 ## 9. Version & Contribution Surface
 
-- **Version:** `0.6.0` · **Engine:** `vscode ^1.125.0` · **Entry:** `./out/extension.js`
-- **Activation:** `onStartupFinished`, `onLanguageModelChatProvider:opencodego`, `onLanguageModelChatProvider:opencodezen`
-- **Contribution points:** `commands` (16), `configuration` (35+ keys), `languageModelChatProviders` (4 vendors: `opencodego`, `opencodezen`, `opencodego-agent`, `opencodezen-agent`)
-- **4 providers:** Go (paid) + Zen (free default) + agent-host variants mirroring each base vendor
+- **Version:** `0.1.0` · **Engine:** `vscode ^1.125.0` · **Entry:** `./out/extension.js`
+- **Activation:** `onStartupFinished`, `onLanguageModelChatProvider:{opencodego,opencodezen,volcengineArk,qianwenai,xiaomimimo}` + `-agent` variants
+- **Contribution points:** `commands` (29), `configuration` (per-provider settings under `opencodego.*` / `opencodezen.*` / `volcengineArk.*` / `qianwenai.*` / `xiaomimimo.*`), `languageModelChatProviders` (10 vendors: 5 base + 5 agent)
+- **5 providers:** OpenCode Go (paid) + OpenCode Zen (free default) + Volcengine Ark (coding plan) + Qianwen AI (token plan) + Xiaomi MiMo (token plan) — each with an agent-host variant
 - **Endpoints:** `https://opencode.ai/zen/{go/,}v1/{models,chat/completions,messages,responses}` + `https://opencode.ai/zen/go/v1/usage` (server meters) + `https://models.dev/api.json` (metadata)
 
 ---

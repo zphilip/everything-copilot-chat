@@ -34,6 +34,7 @@ import {
   MAX_HISTORY_IMAGES_KEPT,
   MAX_IMAGE_BASE64_BYTES,
   MAX_TOOL_RESULT_IMAGE_BYTES,
+  MIMO_SECRET_KEY,
   MODEL_LIST_CACHE_TTL_MS,
   MODEL_LIST_FETCH_MAX_RETRIES,
   MODEL_LIST_FETCH_TIMEOUT_MS,
@@ -86,6 +87,7 @@ describe("config — secret keys", () => {
     assert.equal(secretKeyFor("opencodezen"), ZEN_SECRET_KEY);
     assert.equal(secretKeyFor("volcengineArk"), VOLC_SECRET_KEY);
     assert.equal(secretKeyFor("qianwenai"), QIANWEN_SECRET_KEY);
+    assert.equal(secretKeyFor("xiaomimimo"), MIMO_SECRET_KEY);
     assert.notEqual(secretKeyFor("opencodego"), secretKeyFor("opencodezen"));
   });
 });

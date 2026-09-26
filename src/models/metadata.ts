@@ -1,4 +1,12 @@
-import { GO_VENDOR, ZEN_VENDOR, VOLC_VENDOR, QIANWEN_VENDOR, type ProviderVendor, type AllProviderVendor } from "../providerTypes";
+import {
+  GO_VENDOR,
+  ZEN_VENDOR,
+  VOLC_VENDOR,
+  QIANWEN_VENDOR,
+  MIMO_VENDOR,
+  type ProviderVendor,
+  type AllProviderVendor,
+} from "../providerTypes";
 import { MODEL_LIMITS_BY_PROVIDER, MODELS_WITHOUT_TEMPERATURE, VISION_CAPABLE_MODELS } from "./modelTables";
 
 export interface BaseModelLimits {
@@ -140,6 +148,7 @@ export interface ModelsDevResponse {
   "opencode-go"?: ModelsDevProviderRecord;
   "volcengine-ark"?: ModelsDevProviderRecord;
   "qianwen-ai"?: ModelsDevProviderRecord;
+  "xiaomi-mimo"?: ModelsDevProviderRecord;
 }
 
 import {
@@ -163,6 +172,7 @@ const MODELS_DEV_PROVIDER_BY_VENDOR: Record<ProviderVendor, keyof ModelsDevRespo
   [ZEN_VENDOR]: "opencode",
   [VOLC_VENDOR]: "volcengine-ark",
   [QIANWEN_VENDOR]: "qianwen-ai",
+  [MIMO_VENDOR]: "xiaomi-mimo",
 };
 
 export function isFreeModel(modelId: string): boolean {
@@ -189,6 +199,7 @@ export function bundledModelMetadataSnapshot(): CachedModelMetadataSnapshot {
       [ZEN_VENDOR]: bundledModelMetadataForProvider(ZEN_VENDOR),
       [VOLC_VENDOR]: bundledModelMetadataForProvider(VOLC_VENDOR),
       [QIANWEN_VENDOR]: bundledModelMetadataForProvider(QIANWEN_VENDOR),
+      [MIMO_VENDOR]: bundledModelMetadataForProvider(MIMO_VENDOR),
     },
   };
 }
@@ -223,6 +234,7 @@ export function normalizeModelsDevSnapshot(data: ModelsDevResponse): CachedModel
       [ZEN_VENDOR]: normalizeModelsDevProvider(data[MODELS_DEV_PROVIDER_BY_VENDOR[ZEN_VENDOR]]?.models ?? {}),
       [VOLC_VENDOR]: normalizeModelsDevProvider(data[MODELS_DEV_PROVIDER_BY_VENDOR[VOLC_VENDOR]]?.models ?? {}),
       [QIANWEN_VENDOR]: normalizeModelsDevProvider(data[MODELS_DEV_PROVIDER_BY_VENDOR[QIANWEN_VENDOR]]?.models ?? {}),
+      [MIMO_VENDOR]: normalizeModelsDevProvider(data[MODELS_DEV_PROVIDER_BY_VENDOR[MIMO_VENDOR]]?.models ?? {}),
     },
   };
 }

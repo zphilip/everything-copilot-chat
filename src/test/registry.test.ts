@@ -118,6 +118,12 @@ describe("model registry — lookup mechanics", () => {
     assert.equal(lookupModelRegistryEntry("minimax-m2.7").thinkingFamily, "minimax");
   });
 
+  it("routes MiMo models to Messages on the Xiaomi token-plan vendor but chat-completions elsewhere", () => {
+    assert.equal(lookupModelRegistryEntry("mimo-v2.5", "xiaomimimo").endpointKind, "messages");
+    assert.equal(lookupModelRegistryEntry("mimo-v2.5", "opencodego").endpointKind, "chat-completions");
+    assert.equal(lookupModelRegistryEntry("mimo-v2.5", "opencodezen").endpointKind, "chat-completions");
+  });
+
   it("keeps the specific minimax-m2 row before the generic minimax row", () => {
     const indexOf = (family: string): number => MODEL_REGISTRY.findIndex((entry) => entry.family === family);
     assert.ok(indexOf("minimax-m2") >= 0);

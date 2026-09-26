@@ -59,7 +59,9 @@
     "onLanguageModelChatProvider:opencodego",
     "onLanguageModelChatProvider:opencodezen",
     "onLanguageModelChatProvider:volcengineArk",
-    "onLanguageModelChatProvider:qianwenai"
+    "onLanguageModelChatProvider:qianwenai",
+    "onLanguageModelChatProvider:xiaomimimo",
+    "onLanguageModelChatProvider:xiaomimimo-agent"
   ],
   "main": "./out/extension.js",
   "contributes": {
@@ -131,6 +133,22 @@
       {
         "command": "qianwenai.refreshModels",
         "title": "Qianwen AI: Refresh Models"
+      },
+      {
+        "command": "xiaomimimo.manage",
+        "title": "Xiaomi MiMo: Manage Provider"
+      },
+      {
+        "command": "xiaomimimo.toggleProvider",
+        "title": "Xiaomi MiMo: Remove/Re-add Provider in Language Models"
+      },
+      {
+        "command": "xiaomimimo.diagnostics",
+        "title": "Xiaomi MiMo: Diagnostics"
+      },
+      {
+        "command": "xiaomimimo.refreshModels",
+        "title": "Xiaomi MiMo: Refresh Models"
       },
       {
         "command": "opencodego.modelPickerDiagnostics",
@@ -534,6 +552,31 @@
             "markdownDescription": "Register the Qianwen AI provider. Set to `false` to remove Qianwen AI from the Language Models list and all model pickers (like deleting the provider in GitHub Copilot's Manage Language Models). Models you previously configured stay in your language-models config so they come back if you re-enable. Requires a window reload to take effect."
           }
         }
+      },
+      {
+        "title": "Xiaomi MiMo",
+        "properties": {
+          "xiaomimimo.apiBaseUrl": {
+            "type": "string",
+            "default": "https://token-plan-cn.xiaomimimo.com/anthropic",
+            "description": "Base URL for the Xiaomi MiMo Anthropic-compatible Messages API. The extension appends /v1/messages. Requires a window reload after changing."
+          },
+          "xiaomimimo.modelsBaseUrl": {
+            "type": "string",
+            "default": "https://token-plan-cn.xiaomimimo.com/v1",
+            "description": "Base URL for the Xiaomi MiMo OpenAI-compatible endpoint used to fetch the live model list. The extension appends /models. Requires a window reload after changing."
+          },
+          "xiaomimimo.models": {
+            "type": "string",
+            "default": "",
+            "description": "Comma-separated model IDs used as a fallback if the live model list cannot be fetched (e.g. `mimo-v2.5,mimo-v2.5-pro`). Empty uses the built-in default list."
+          },
+          "xiaomimimo.enabled": {
+            "type": "boolean",
+            "default": true,
+            "markdownDescription": "Register the Xiaomi MiMo provider. Set to `false` to remove Xiaomi MiMo from the Language Models list and all model pickers (like deleting the provider in GitHub Copilot's Manage Language Models). Models you previously configured stay in your language-models config so they come back if you re-enable. Requires a window reload to take effect."
+          }
+        }
       }
     ],
     "languageModelChatProviders": [
@@ -614,6 +657,25 @@
         }
       },
       {
+        "vendor": "xiaomimimo",
+        "displayName": "Xiaomi MiMo",
+        "when": "config.xiaomimimo.enabled",
+        "configuration": {
+          "type": "object",
+          "required": [
+            "apiKey"
+          ],
+          "properties": {
+            "apiKey": {
+              "type": "string",
+              "title": "Xiaomi MiMo API Key",
+              "description": "Enter your Xiaomi MiMo token-plan API key.",
+              "secret": true
+            }
+          }
+        }
+      },
+      {
         "vendor": "opencodego-agent",
         "displayName": "OpenCode Go (Agents)",
         "when": "config.opencodego.showAgentModelsInManagePanel"
@@ -631,6 +693,11 @@
       {
         "vendor": "qianwenai-agent",
         "displayName": "Qianwen AI (Agents)",
+        "when": "config.opencodego.showAgentModelsInManagePanel"
+      },
+      {
+        "vendor": "xiaomimimo-agent",
+        "displayName": "Xiaomi MiMo (Agents)",
         "when": "config.opencodego.showAgentModelsInManagePanel"
       }
     ]

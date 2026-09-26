@@ -1,6 +1,8 @@
 import * as vscode from "vscode";
 import {
   CONFIG_SECTION,
+  DEFAULT_MIMO_API_BASE_URL,
+  DEFAULT_MIMO_MODELS_BASE_URL,
   DEFAULT_QIANWEN_API_BASE_URL,
   DEFAULT_QIANWEN_MODELS_BASE_URL,
   DEFAULT_VOLC_API_BASE_URL,
@@ -8,6 +10,9 @@ import {
   FALLBACK_USER_AGENT,
   FREE_ZEN_MODEL_IDS,
   SETTING_FREE_ONLY,
+  SETTING_MIMO_API_BASE_URL,
+  SETTING_MIMO_MODELS,
+  SETTING_MIMO_MODELS_BASE_URL,
   SETTING_QIANWEN_API_BASE_URL,
   SETTING_QIANWEN_MODELS,
   SETTING_QIANWEN_MODELS_BASE_URL,
@@ -19,10 +24,12 @@ import type { ModelEndpointKind } from "../core/registry";
 import type { ApiMessage } from "../request/types";
 import {
   AGENT_GO_VENDOR,
+  AGENT_MIMO_VENDOR,
   AGENT_QIANWEN_VENDOR,
   AGENT_VOLC_VENDOR,
   AGENT_ZEN_VENDOR,
   GO_VENDOR,
+  MIMO_VENDOR,
   QIANWEN_VENDOR,
   VOLC_VENDOR,
   ZEN_VENDOR,
@@ -45,7 +52,7 @@ export interface ProviderDefinition {
   /** When true, this provider only serves agent-host models (targetChatSessionType=copilotcli). */
   isAgentVariant?: boolean;
   /** The vendor key for the main (non-agent) provider definition this variant mirrors. */
-  baseVendor?: typeof GO_VENDOR | typeof ZEN_VENDOR | typeof VOLC_VENDOR | typeof QIANWEN_VENDOR;
+  baseVendor?: typeof GO_VENDOR | typeof ZEN_VENDOR | typeof VOLC_VENDOR | typeof QIANWEN_VENDOR | typeof MIMO_VENDOR;
   /** Skip the live GET /models fetch and use the static model list instead. */
   staticModelList?: boolean;
   /** Full config key for a comma-separated model-ID override (root-scoped). */
@@ -84,7 +91,8 @@ export { isTransientFetchError } from "../retry";
 /** Create an agent-variant provider definition that inherits URLs, models, and filters from a base. */
 function providerVariant(
   base: ProviderDefinition,
-  agentVendor: typeof AGENT_GO_VENDOR | typeof AGENT_ZEN_VENDOR | typeof AGENT_VOLC_VENDOR | typeof AGENT_QIANWEN_VENDOR,
+  agentVendor:
+    typeof AGENT_GO_VENDOR | typeof AGENT_ZEN_VENDOR | typeof AGENT_VOLC_VENDOR | typeof AGENT_QIANWEN_VENDOR | typeof AGENT_MIMO_VENDOR,
   displayName: string,
 ): ProviderDefinition {
   return {
@@ -239,11 +247,31 @@ export const PROVIDERS: Record<ProviderDefinition["vendor"], ProviderDefinition>
     fallbackModels: ["qwen-max", "qwen-plus", "qwen-turbo", "qwen-max-latest", "qwen-plus-latest"],
     modelListSetting: SETTING_QIANWEN_MODELS,
   };
+  const mimo: ProviderDefinition = {
+    vendor: MIMO_VENDOR,
+    displayName: "Xiaomi MiMo",
+    modelNamePrefix: "Xiaomi MiMo",
+    // Live model list from the OpenAI-compatible endpoint; chat requests route
+    // to the Anthropic-compatible endpoint (see the `mimo-messages` registry entry).
+    modelsUrl: `${normalizeApiBaseUrl(
+      vscode.workspace.getConfiguration().get<string>(SETTING_MIMO_MODELS_BASE_URL, ""),
+      DEFAULT_MIMO_MODELS_BASE_URL,
+    )}/models`,
+    chatCompletionsUrl: "",
+    messagesUrl: `${normalizeApiBaseUrl(
+      vscode.workspace.getConfiguration().get<string>(SETTING_MIMO_API_BASE_URL, ""),
+      DEFAULT_MIMO_API_BASE_URL,
+    )}/v1/messages`,
+    testModelId: "mimo-v2.5",
+    fallbackModels: ["mimo-v2.5", "mimo-v2.5-pro", "mimo-v2-omni", "mimo-v2-pro"],
+    modelListSetting: SETTING_MIMO_MODELS,
+  };
   return {
     [GO_VENDOR]: go,
     [ZEN_VENDOR]: zen,
     [VOLC_VENDOR]: volc,
     [QIANWEN_VENDOR]: qianwen,
+    [MIMO_VENDOR]: mimo,
     [AGENT_GO_VENDOR]: { ...providerVariant(go, AGENT_GO_VENDOR, "OpenCode Go (Agents)"), isAgentVariant: true, baseVendor: GO_VENDOR },
     [AGENT_ZEN_VENDOR]: {
       ...providerVariant(zen, AGENT_ZEN_VENDOR, "OpenCode Zen (Agents)"),
@@ -259,6 +287,11 @@ export const PROVIDERS: Record<ProviderDefinition["vendor"], ProviderDefinition>
       ...providerVariant(qianwen, AGENT_QIANWEN_VENDOR, "Qianwen AI (Agents)"),
       isAgentVariant: true,
       baseVendor: QIANWEN_VENDOR,
+    },
+    [AGENT_MIMO_VENDOR]: {
+      ...providerVariant(mimo, AGENT_MIMO_VENDOR, "Xiaomi MiMo (Agents)"),
+      isAgentVariant: true,
+      baseVendor: MIMO_VENDOR,
     },
   };
 })();
