@@ -100,6 +100,17 @@ export const MODEL_REGISTRY: ModelRegistryEntry[] = [
     sdkPackage: "@ai-sdk/openai",
     thinkingFamily: "muse",
   },
+  // MiniMax token-plan — every minimax model is served through the Anthropic
+  // Messages API (api.minimax.cn/anthropic). Vendor-restricted so the Go/Zen
+  // minimax rows are unaffected.
+  {
+    family: "minimax-messages",
+    patterns: [/^minimax-/i],
+    endpointKind: "messages",
+    sdkPackage: "@ai-sdk/anthropic",
+    thinkingFamily: "minimax",
+    vendors: ["minimax"],
+  },
   // Everything else that has a dedicated thinking strategy → chat-completions.
   {
     family: "minimax",

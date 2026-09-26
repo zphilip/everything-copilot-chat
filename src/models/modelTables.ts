@@ -1,4 +1,4 @@
-import { GO_VENDOR, ZEN_VENDOR, VOLC_VENDOR, QIANWEN_VENDOR, MIMO_VENDOR, type ProviderVendor } from "../providerTypes";
+import { GO_VENDOR, ZEN_VENDOR, VOLC_VENDOR, QIANWEN_VENDOR, MIMO_VENDOR, MINIMAX_VENDOR, type ProviderVendor } from "../providerTypes";
 import type { BaseModelLimits } from "./metadata";
 
 /**
@@ -92,6 +92,14 @@ export const MODEL_LIMITS_BY_PROVIDER: Record<ProviderVendor, Record<string, Bas
     "mimo-v2.5-pro": { contextWindow: 1048576, maxOutputTokens: 128000 },
     "mimo-v2-omni": { contextWindow: 262144, maxOutputTokens: 128000 },
     "mimo-v2-pro": { contextWindow: 1048576, maxOutputTokens: 128000 },
+  },
+  // MiniMax token-plan models (Anthropic Messages API).
+  [MINIMAX_VENDOR]: {
+    "minimax-m3": { contextWindow: 512000, maxOutputTokens: 131072 },
+    "minimax-m2.7": { contextWindow: 204800, maxOutputTokens: 131072 },
+    "minimax-m2.5": { contextWindow: 204800, maxOutputTokens: 65536 },
+    "minimax-m2.1": { contextWindow: 204800, maxOutputTokens: 131072 },
+    "minimax-m2": { contextWindow: 204800, maxOutputTokens: 131072 },
   },
 };
 

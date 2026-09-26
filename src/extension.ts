@@ -28,11 +28,13 @@ import {
   VOLC_VENDOR,
   QIANWEN_VENDOR,
   MIMO_VENDOR,
+  MINIMAX_VENDOR,
   AGENT_GO_VENDOR,
   AGENT_ZEN_VENDOR,
   AGENT_VOLC_VENDOR,
   AGENT_QIANWEN_VENDOR,
   AGENT_MIMO_VENDOR,
+  AGENT_MINIMAX_VENDOR,
 } from "./providerTypes";
 import { providerEnabledSetting } from "./providerEnablement";
 import { showVisionProxyPicker } from "./provider/visionProxy";
@@ -173,12 +175,14 @@ export function activate(context: vscode.ExtensionContext) {
   const volcProviderEnabled = vscode.workspace.getConfiguration().get<boolean>(providerEnabledSetting(VOLC_VENDOR), true);
   const qianwenProviderEnabled = vscode.workspace.getConfiguration().get<boolean>(providerEnabledSetting(QIANWEN_VENDOR), true);
   const mimoProviderEnabled = vscode.workspace.getConfiguration().get<boolean>(providerEnabledSetting(MIMO_VENDOR), true);
+  const minimaxProviderEnabled = vscode.workspace.getConfiguration().get<boolean>(providerEnabledSetting(MINIMAX_VENDOR), true);
   const goProvider = new OpenCodeProvider(context, PROVIDERS[GO_VENDOR]);
   const zenProvider = new OpenCodeProvider(context, PROVIDERS[ZEN_VENDOR]);
   const volcProvider = new OpenCodeProvider(context, PROVIDERS[VOLC_VENDOR]);
   const qianwenProvider = new OpenCodeProvider(context, PROVIDERS[QIANWEN_VENDOR]);
   const mimoProvider = new OpenCodeProvider(context, PROVIDERS[MIMO_VENDOR]);
-  const modelInfoProviders: OpenCodeProvider[] = [goProvider, zenProvider, volcProvider, qianwenProvider, mimoProvider];
+  const minimaxProvider = new OpenCodeProvider(context, PROVIDERS[MINIMAX_VENDOR]);
+  const modelInfoProviders: OpenCodeProvider[] = [goProvider, zenProvider, volcProvider, qianwenProvider, mimoProvider, minimaxProvider];
 
   const subscriptions: vscode.Disposable[] = [
     // Register the chat providers only while the matching `opencodego.enabled`
@@ -191,6 +195,7 @@ export function activate(context: vscode.ExtensionContext) {
     ...(volcProviderEnabled ? [vscode.lm.registerLanguageModelChatProvider(VOLC_VENDOR, volcProvider)] : []),
     ...(qianwenProviderEnabled ? [vscode.lm.registerLanguageModelChatProvider(QIANWEN_VENDOR, qianwenProvider)] : []),
     ...(mimoProviderEnabled ? [vscode.lm.registerLanguageModelChatProvider(MIMO_VENDOR, mimoProvider)] : []),
+    ...(minimaxProviderEnabled ? [vscode.lm.registerLanguageModelChatProvider(MINIMAX_VENDOR, minimaxProvider)] : []),
     vscode.commands.registerCommand("opencodego.manage", () => goProvider.manage()),
     vscode.commands.registerCommand("opencodego.diagnostics", () => goProvider.showDiagnostics()),
     vscode.commands.registerCommand("opencodego.refreshModels", () => goProvider.refreshModels()),
@@ -212,6 +217,10 @@ export function activate(context: vscode.ExtensionContext) {
     vscode.commands.registerCommand("xiaomimimo.diagnostics", () => mimoProvider.showDiagnostics()),
     vscode.commands.registerCommand("xiaomimimo.refreshModels", () => mimoProvider.refreshModels()),
     vscode.commands.registerCommand("xiaomimimo.toggleProvider", () => toggleProviderEnabled(MIMO_VENDOR, "Xiaomi MiMo")),
+    vscode.commands.registerCommand("minimax.manage", () => minimaxProvider.manage()),
+    vscode.commands.registerCommand("minimax.diagnostics", () => minimaxProvider.showDiagnostics()),
+    vscode.commands.registerCommand("minimax.refreshModels", () => minimaxProvider.refreshModels()),
+    vscode.commands.registerCommand("minimax.toggleProvider", () => toggleProviderEnabled(MINIMAX_VENDOR, "MiniMax")),
     vscode.commands.registerCommand("opencodego.modelPickerDiagnostics", () => showModelPickerDiagnostics()),
     vscode.commands.registerCommand("opencodego.setThinkingEffort", () => showThinkingEffortPicker()),
     vscode.commands.registerCommand("opencodego.showUsageDetails", () => {
@@ -383,19 +392,36 @@ export function activate(context: vscode.ExtensionContext) {
 
   // Agent-host providers for the Copilot Agents window (opt-in via config).
   const enableAgents = vscode.workspace.getConfiguration(CONFIG_SECTION).get<boolean>(SETTING_AGENTS_WINDOW, true);
-  if (enableAgents && (goProviderEnabled || zenProviderEnabled || volcProviderEnabled || qianwenProviderEnabled || mimoProviderEnabled)) {
+  if (
+    enableAgents &&
+    (goProviderEnabled ||
+      zenProviderEnabled ||
+      volcProviderEnabled ||
+      qianwenProviderEnabled ||
+      mimoProviderEnabled ||
+      minimaxProviderEnabled)
+  ) {
     const agentGoProvider = new OpenCodeProvider(context, PROVIDERS[AGENT_GO_VENDOR]);
     const agentZenProvider = new OpenCodeProvider(context, PROVIDERS[AGENT_ZEN_VENDOR]);
     const agentVolcProvider = new OpenCodeProvider(context, PROVIDERS[AGENT_VOLC_VENDOR]);
     const agentQianwenProvider = new OpenCodeProvider(context, PROVIDERS[AGENT_QIANWEN_VENDOR]);
     const agentMimoProvider = new OpenCodeProvider(context, PROVIDERS[AGENT_MIMO_VENDOR]);
-    modelInfoProviders.push(agentGoProvider, agentZenProvider, agentVolcProvider, agentQianwenProvider, agentMimoProvider);
+    const agentMinimaxProvider = new OpenCodeProvider(context, PROVIDERS[AGENT_MINIMAX_VENDOR]);
+    modelInfoProviders.push(
+      agentGoProvider,
+      agentZenProvider,
+      agentVolcProvider,
+      agentQianwenProvider,
+      agentMimoProvider,
+      agentMinimaxProvider,
+    );
     subscriptions.push(
       ...(goProviderEnabled ? [vscode.lm.registerLanguageModelChatProvider(AGENT_GO_VENDOR, agentGoProvider)] : []),
       ...(zenProviderEnabled ? [vscode.lm.registerLanguageModelChatProvider(AGENT_ZEN_VENDOR, agentZenProvider)] : []),
       ...(volcProviderEnabled ? [vscode.lm.registerLanguageModelChatProvider(AGENT_VOLC_VENDOR, agentVolcProvider)] : []),
       ...(qianwenProviderEnabled ? [vscode.lm.registerLanguageModelChatProvider(AGENT_QIANWEN_VENDOR, agentQianwenProvider)] : []),
       ...(mimoProviderEnabled ? [vscode.lm.registerLanguageModelChatProvider(AGENT_MIMO_VENDOR, agentMimoProvider)] : []),
+      ...(minimaxProviderEnabled ? [vscode.lm.registerLanguageModelChatProvider(AGENT_MINIMAX_VENDOR, agentMinimaxProvider)] : []),
     );
     // On VS Code 1.129+ the Agents window runs in the agent host process,
     // where extension BYOK models are only reachable through VS Code's BYOK

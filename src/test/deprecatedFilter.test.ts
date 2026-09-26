@@ -49,6 +49,7 @@ function snapshotWithStatus(modelId: string, status: string | undefined): Cached
       volcengineArk: undefined,
       qianwenai: undefined,
       xiaomimimo: undefined,
+      minimax: undefined,
     },
   };
 }

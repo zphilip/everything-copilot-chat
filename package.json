@@ -2,7 +2,7 @@
   "name": "everything-copilot-chat",
   "displayName": "Everything Copilot Chat — Multi-Provider, 30+ AI Models",
   "description": "Use 30+ frontier AI models (DeepSeek V4, Kimi K2.6, GLM-5.1, Qwen3.7, MiMo V2.5, MiniMax M2.7, free Claude Opus, GPT-5.5, Gemini 3.5, Grok) in GitHub Copilot Chat. Bring Your Own Key — no Copilot Pro needed.",
-  "version": "0.1.0",
+  "version": "0.1.2",
   "publisher": "aiwormcn",
   "license": "MIT",
   "icon": "media/opencodego.png",
@@ -61,7 +61,9 @@
     "onLanguageModelChatProvider:volcengineArk",
     "onLanguageModelChatProvider:qianwenai",
     "onLanguageModelChatProvider:xiaomimimo",
-    "onLanguageModelChatProvider:xiaomimimo-agent"
+    "onLanguageModelChatProvider:xiaomimimo-agent",
+    "onLanguageModelChatProvider:minimax",
+    "onLanguageModelChatProvider:minimax-agent"
   ],
   "main": "./out/extension.js",
   "contributes": {
@@ -149,6 +151,22 @@
       {
         "command": "xiaomimimo.refreshModels",
         "title": "Xiaomi MiMo: Refresh Models"
+      },
+      {
+        "command": "minimax.manage",
+        "title": "MiniMax: Manage Provider"
+      },
+      {
+        "command": "minimax.toggleProvider",
+        "title": "MiniMax: Remove/Re-add Provider in Language Models"
+      },
+      {
+        "command": "minimax.diagnostics",
+        "title": "MiniMax: Diagnostics"
+      },
+      {
+        "command": "minimax.refreshModels",
+        "title": "MiniMax: Refresh Models"
       },
       {
         "command": "opencodego.modelPickerDiagnostics",
@@ -577,6 +595,31 @@
             "markdownDescription": "Register the Xiaomi MiMo provider. Set to `false` to remove Xiaomi MiMo from the Language Models list and all model pickers (like deleting the provider in GitHub Copilot's Manage Language Models). Models you previously configured stay in your language-models config so they come back if you re-enable. Requires a window reload to take effect."
           }
         }
+      },
+      {
+        "title": "MiniMax",
+        "properties": {
+          "minimax.apiBaseUrl": {
+            "type": "string",
+            "default": "https://api.minimax.cn/anthropic",
+            "description": "Base URL for the MiniMax Anthropic-compatible Messages API. The extension appends /v1/messages. Requires a window reload after changing."
+          },
+          "minimax.modelsBaseUrl": {
+            "type": "string",
+            "default": "https://api.minimax.cn/v1",
+            "description": "Base URL for the MiniMax OpenAI-compatible endpoint used to fetch the live model list. The extension appends /models. Requires a window reload after changing."
+          },
+          "minimax.models": {
+            "type": "string",
+            "default": "",
+            "description": "Comma-separated model IDs used as a fallback if the live model list cannot be fetched (e.g. `minimax-m2.5,minimax-m2.7`). Empty uses the built-in default list."
+          },
+          "minimax.enabled": {
+            "type": "boolean",
+            "default": true,
+            "markdownDescription": "Register the MiniMax provider. Set to `false` to remove MiniMax from the Language Models list and all model pickers (like deleting the provider in GitHub Copilot's Manage Language Models). Models you previously configured stay in your language-models config so they come back if you re-enable. Requires a window reload to take effect."
+          }
+        }
       }
     ],
     "languageModelChatProviders": [
@@ -676,6 +719,25 @@
         }
       },
       {
+        "vendor": "minimax",
+        "displayName": "MiniMax",
+        "when": "config.minimax.enabled",
+        "configuration": {
+          "type": "object",
+          "required": [
+            "apiKey"
+          ],
+          "properties": {
+            "apiKey": {
+              "type": "string",
+              "title": "MiniMax API Key",
+              "description": "Enter your MiniMax token-plan API key.",
+              "secret": true
+            }
+          }
+        }
+      },
+      {
         "vendor": "opencodego-agent",
         "displayName": "OpenCode Go (Agents)",
         "when": "config.opencodego.showAgentModelsInManagePanel"
@@ -698,6 +760,11 @@
       {
         "vendor": "xiaomimimo-agent",
         "displayName": "Xiaomi MiMo (Agents)",
+        "when": "config.opencodego.showAgentModelsInManagePanel"
+      },
+      {
+        "vendor": "minimax-agent",
+        "displayName": "MiniMax (Agents)",
         "when": "config.opencodego.showAgentModelsInManagePanel"
       }
     ]

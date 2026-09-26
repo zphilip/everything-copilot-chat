@@ -28,12 +28,15 @@ export const VOLC_SECRET_KEY = "volcengineArk.apiKey";
 export const QIANWEN_SECRET_KEY = "qianwenai.apiKey";
 /** SecretStorage key for the Xiaomi MiMo token-plan API key. */
 export const MIMO_SECRET_KEY = "xiaomimimo.apiKey";
+/** SecretStorage key for the MiniMax API key. */
+export const MINIMAX_SECRET_KEY = "minimax.apiKey";
 /** Resolve the SecretStorage key for a provider vendor. */
-export function secretKeyFor(vendor: "opencodego" | "opencodezen" | "volcengineArk" | "qianwenai" | "xiaomimimo"): string {
+export function secretKeyFor(vendor: "opencodego" | "opencodezen" | "volcengineArk" | "qianwenai" | "xiaomimimo" | "minimax"): string {
   if (vendor === "opencodezen") return ZEN_SECRET_KEY;
   if (vendor === "volcengineArk") return VOLC_SECRET_KEY;
   if (vendor === "qianwenai") return QIANWEN_SECRET_KEY;
   if (vendor === "xiaomimimo") return MIMO_SECRET_KEY;
+  if (vendor === "minimax") return MINIMAX_SECRET_KEY;
   return SECRET_KEY;
 }
 /** Client name sent in the `x-opencode-client` header. */
@@ -160,6 +163,16 @@ export const SETTING_MIMO_API_BASE_URL = "xiaomimimo.apiBaseUrl";
 export const SETTING_MIMO_MODELS_BASE_URL = "xiaomimimo.modelsBaseUrl";
 /** Full config key for the comma-separated Xiaomi MiMo model-list override (root-scoped). */
 export const SETTING_MIMO_MODELS = "xiaomimimo.models";
+/** Default MiniMax Anthropic-compatible base URL (Messages API). */
+export const DEFAULT_MINIMAX_API_BASE_URL = "https://api.minimax.cn/anthropic";
+/** Default MiniMax OpenAI-compatible base URL (used for the live /models list). */
+export const DEFAULT_MINIMAX_MODELS_BASE_URL = "https://api.minimax.cn/v1";
+/** Full config key for the MiniMax Anthropic base-URL override (root-scoped). */
+export const SETTING_MINIMAX_API_BASE_URL = "minimax.apiBaseUrl";
+/** Full config key for the MiniMax models-list base-URL override (root-scoped). */
+export const SETTING_MINIMAX_MODELS_BASE_URL = "minimax.modelsBaseUrl";
+/** Full config key for the comma-separated MiniMax model-list override (root-scoped). */
+export const SETTING_MINIMAX_MODELS = "minimax.models";
 
 /** Normalize a configured API base URL, falling back when it is malformed. */
 export function normalizeApiBaseUrl(value: string, fallback: string): string {

@@ -4,6 +4,7 @@ import {
   VOLC_VENDOR,
   QIANWEN_VENDOR,
   MIMO_VENDOR,
+  MINIMAX_VENDOR,
   type ProviderVendor,
   type AllProviderVendor,
 } from "../providerTypes";
@@ -149,6 +150,7 @@ export interface ModelsDevResponse {
   "volcengine-ark"?: ModelsDevProviderRecord;
   "qianwen-ai"?: ModelsDevProviderRecord;
   "xiaomi-mimo"?: ModelsDevProviderRecord;
+  minimax?: ModelsDevProviderRecord;
 }
 
 import {
@@ -173,6 +175,7 @@ const MODELS_DEV_PROVIDER_BY_VENDOR: Record<ProviderVendor, keyof ModelsDevRespo
   [VOLC_VENDOR]: "volcengine-ark",
   [QIANWEN_VENDOR]: "qianwen-ai",
   [MIMO_VENDOR]: "xiaomi-mimo",
+  [MINIMAX_VENDOR]: "minimax",
 };
 
 export function isFreeModel(modelId: string): boolean {
@@ -200,6 +203,7 @@ export function bundledModelMetadataSnapshot(): CachedModelMetadataSnapshot {
       [VOLC_VENDOR]: bundledModelMetadataForProvider(VOLC_VENDOR),
       [QIANWEN_VENDOR]: bundledModelMetadataForProvider(QIANWEN_VENDOR),
       [MIMO_VENDOR]: bundledModelMetadataForProvider(MIMO_VENDOR),
+      [MINIMAX_VENDOR]: bundledModelMetadataForProvider(MINIMAX_VENDOR),
     },
   };
 }
@@ -235,6 +239,7 @@ export function normalizeModelsDevSnapshot(data: ModelsDevResponse): CachedModel
       [VOLC_VENDOR]: normalizeModelsDevProvider(data[MODELS_DEV_PROVIDER_BY_VENDOR[VOLC_VENDOR]]?.models ?? {}),
       [QIANWEN_VENDOR]: normalizeModelsDevProvider(data[MODELS_DEV_PROVIDER_BY_VENDOR[QIANWEN_VENDOR]]?.models ?? {}),
       [MIMO_VENDOR]: normalizeModelsDevProvider(data[MODELS_DEV_PROVIDER_BY_VENDOR[MIMO_VENDOR]]?.models ?? {}),
+      [MINIMAX_VENDOR]: normalizeModelsDevProvider(data[MODELS_DEV_PROVIDER_BY_VENDOR[MINIMAX_VENDOR]]?.models ?? {}),
     },
   };
 }

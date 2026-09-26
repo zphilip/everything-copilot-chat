@@ -124,6 +124,12 @@ describe("model registry — lookup mechanics", () => {
     assert.equal(lookupModelRegistryEntry("mimo-v2.5", "opencodezen").endpointKind, "chat-completions");
   });
 
+  it("routes MiniMax models to Messages on the MiniMax vendor but chat-completions elsewhere", () => {
+    assert.equal(lookupModelRegistryEntry("minimax-m3", "minimax").endpointKind, "messages");
+    assert.equal(lookupModelRegistryEntry("minimax-m3", "opencodego").endpointKind, "chat-completions");
+    assert.equal(lookupModelRegistryEntry("minimax-m3", "opencodezen").endpointKind, "chat-completions");
+  });
+
   it("keeps the specific minimax-m2 row before the generic minimax row", () => {
     const indexOf = (family: string): number => MODEL_REGISTRY.findIndex((entry) => entry.family === family);
     assert.ok(indexOf("minimax-m2") >= 0);

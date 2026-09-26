@@ -28,11 +28,13 @@ import { calculateModelLimits, type ModelLimits } from "../models/modelLimits";
 import {
   AGENT_GO_VENDOR,
   AGENT_MIMO_VENDOR,
+  AGENT_MINIMAX_VENDOR,
   AGENT_QIANWEN_VENDOR,
   AGENT_VOLC_VENDOR,
   AGENT_ZEN_VENDOR,
   GO_VENDOR,
   MIMO_VENDOR,
+  MINIMAX_VENDOR,
   QIANWEN_VENDOR,
   VOLC_VENDOR,
   ZEN_VENDOR,
@@ -267,11 +269,13 @@ export function resolveRawModelId(modelId: string): string {
     `${VOLC_VENDOR}:`,
     `${QIANWEN_VENDOR}:`,
     `${MIMO_VENDOR}:`,
+    `${MINIMAX_VENDOR}:`,
     `${AGENT_GO_VENDOR}:`,
     `${AGENT_ZEN_VENDOR}:`,
     `${AGENT_VOLC_VENDOR}:`,
     `${AGENT_QIANWEN_VENDOR}:`,
     `${AGENT_MIMO_VENDOR}:`,
+    `${AGENT_MINIMAX_VENDOR}:`,
   ];
   for (const prefix of prefixes) {
     if (base.startsWith(prefix)) {
@@ -288,10 +292,12 @@ export function resolveVendorFromId(modelId: string): AllProviderVendor {
   if (modelId.startsWith(`${AGENT_VOLC_VENDOR}:`)) return AGENT_VOLC_VENDOR;
   if (modelId.startsWith(`${AGENT_QIANWEN_VENDOR}:`)) return AGENT_QIANWEN_VENDOR;
   if (modelId.startsWith(`${AGENT_MIMO_VENDOR}:`)) return AGENT_MIMO_VENDOR;
+  if (modelId.startsWith(`${AGENT_MINIMAX_VENDOR}:`)) return AGENT_MINIMAX_VENDOR;
   if (modelId.startsWith(`${ZEN_VENDOR}:`)) return ZEN_VENDOR;
   if (modelId.startsWith(`${VOLC_VENDOR}:`)) return VOLC_VENDOR;
   if (modelId.startsWith(`${QIANWEN_VENDOR}:`)) return QIANWEN_VENDOR;
   if (modelId.startsWith(`${MIMO_VENDOR}:`)) return MIMO_VENDOR;
+  if (modelId.startsWith(`${MINIMAX_VENDOR}:`)) return MINIMAX_VENDOR;
   return GO_VENDOR;
 }
 

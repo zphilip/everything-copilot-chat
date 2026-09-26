@@ -1,5 +1,5 @@
 import { isFreeModel, type ResolvedModelMetadata } from "../models/metadata";
-import { GO_VENDOR, ZEN_VENDOR, QIANWEN_VENDOR, MIMO_VENDOR, resolveBaseVendor } from "../providerTypes";
+import { GO_VENDOR, ZEN_VENDOR, QIANWEN_VENDOR, MIMO_VENDOR, MINIMAX_VENDOR, resolveBaseVendor } from "../providerTypes";
 import type { ProviderDefinition } from "../provider/definitions";
 
 /**
@@ -60,7 +60,9 @@ export function modelPricingFields(
           ? "Qianwen"
           : baseVendor === MIMO_VENDOR
             ? "MiMo"
-            : "Ark";
+            : baseVendor === MINIMAX_VENDOR
+              ? "MiniMax"
+              : "Ark";
   return {
     pricing: `${planLabel} subscription`,
   };

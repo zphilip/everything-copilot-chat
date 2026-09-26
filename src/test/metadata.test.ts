@@ -161,7 +161,7 @@ describe("getContextSizeOptionsForModel — Kimi context tiers (issue #87)", () 
 describe("resolveModelMetadata — cold-start temperature chain", () => {
   const emptySnapshot: CachedModelMetadataSnapshot = {
     fetchedAt: 0,
-    providers: { opencodego: {}, opencodezen: {}, volcengineArk: {}, qianwenai: {}, xiaomimimo: {} },
+    providers: { opencodego: {}, opencodezen: {}, volcengineArk: {}, qianwenai: {}, xiaomimimo: {}, minimax: {} },
   };
 
   it("propagates the bundled temperature:false when no live/cached metadata exists", () => {
