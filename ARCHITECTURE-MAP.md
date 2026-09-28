@@ -450,7 +450,7 @@ On push/PR to `main`/`develop`, Node 20: `npm ci` → `compile` → `lint` (with
 
 ### Assets (`media/`)
 
-`opencodego.png` / `opencodego.svg` — the extension icon.
+`everythingcopilot.png` / `everythingcopilot.svg` — the extension icon.
 
 ### Toolchain
 

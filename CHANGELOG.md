@@ -4,6 +4,12 @@ All notable changes to the **Everything Copilot Chat** extension are documented 
 
 **Everything Copilot Chat** is a fork of [opencode-copilot-chat](https://github.com/ltmoerdani/opencode-copilot-chat) (forked from v0.7.3). The upstream project's history is not included here.
 
+## [0.1.3] — 2026-09-28
+
+### Changed
+
+- **New extension icon.** Replaced the OpenCode "O" mark with a clean chat-bubble + AI-sparkle design in the teal → violet palette, and renamed the icon assets from `opencodego.*` to `everythingcopilot.*`.
+
 ## [0.1.2] — 2026-09-26
 
 ### Added
