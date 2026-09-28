@@ -38,13 +38,47 @@ interface CommandResult {
   output: string;
 }
 
+// Windows command-line escaping, ported from `cross-spawn`. The repo sits under
+// a path containing spaces ("F:\My Projects\..."), so a `.cmd` shim's full path
+// is split by cmd.exe when spawned through `spawnSync`'s `shell` option (which
+// joins the tokens without quoting). Escape each token and run it verbatim via
+// cmd.exe instead.
+const WINDOWS_META_CHARS = /([()\][%!^"`<>&|;, *?])/g;
+
+function escapeWindowsCommand(arg: string): string {
+  return arg.replace(WINDOWS_META_CHARS, "^$1");
+}
+
+function escapeWindowsArgument(arg: string, doubleEscapeMetaChars: boolean): string {
+  let value = arg;
+  value = value.replace(/(?=(\\+?)?)\1"/g, '$1$1\\"');
+  value = value.replace(/(?=(\\+?)?)\1$/, "$1$1");
+  value = '"' + value + '"';
+  value = value.replace(WINDOWS_META_CHARS, "^$1");
+  if (doubleEscapeMetaChars) {
+    value = value.replace(WINDOWS_META_CHARS, "^$1");
+  }
+  return value;
+}
+
 function run(cmd: string, args: string[]): CommandResult {
-  const res: SpawnSyncReturns<string> = spawnSync(cmd, args, {
-    cwd: root,
-    encoding: "utf8",
-    // Windows cannot exec `.cmd` shims directly; route through the shell.
-    shell: process.platform === "win32",
-  });
+  let res: SpawnSyncReturns<string>;
+  if (process.platform === "win32" && cmd.endsWith(".cmd")) {
+    // A `.cmd` shim proxies args through `%*`, so meta characters are parsed a
+    // second time and must be `^`-escaped twice.
+    const shellCommand = [escapeWindowsCommand(cmd), ...args.map((arg) => escapeWindowsArgument(arg, true))].join(" ");
+    res = spawnSync(process.env.ComSpec ?? "cmd.exe", ["/d", "/s", "/c", `"${shellCommand}"`], {
+      cwd: root,
+      encoding: "utf8",
+      windowsVerbatimArguments: true,
+    });
+  } else {
+    res = spawnSync(cmd, args, {
+      cwd: root,
+      encoding: "utf8",
+      shell: process.platform === "win32",
+    });
+  }
   return { status: res.status, output: `${res.stdout}${res.stderr}`.trim() };
 }
 
