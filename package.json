@@ -800,7 +800,7 @@
     ".husky/*": "shellcheck"
   },
   "devDependencies": {
-    "@types/node": "^26.2.0",
+    "@types/node": "^26.6.3",
     "@types/vscode": "^1.125.0",
     "@vscode/vsce": "^3.9.2",
     "eslint": "^10.8.1",
